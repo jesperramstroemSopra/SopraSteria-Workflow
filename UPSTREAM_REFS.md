@@ -24,12 +24,30 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 
 ---
 
-### 3. `microsoft/skills-for-copilot-studio`
+### 3. `microsoft/copilot-studio-plugin` ⭐ PRIMARY
+
+- **URL:** https://github.com/microsoft/copilot-studio-plugin
+- **Status:** **Active.** This is the official **successor to `microsoft/skills-for-copilot-studio`** (see the superseded entry below).
+- **Description:** An experimental plugin (`mcs-assistant`) for creating, editing, validating, and **migrating classic agents to the new agentic-loop experience**. It ships four sub-agents (`copilot-studio-architect`, `copilot-studio-describer`, `copilot-studio-init`, `copilot-studio-manage`) and two commands (`/migrate`, `/chat`), plus helper scripts including `convert-actions-to-tools.js`.
+- **Hard dependency:** Power Platform CLI (`pac`) **greater than 2.9.3**. Earlier versions will not work. See [`shared/tools-and-setup.md`](knowledge/shared/tools-and-setup.md).
+- **Installation:**
+  ```text
+  /plugin marketplace add microsoft/copilot-studio-plugin
+  /plugin install mcs-assistant@copilot-studio-plugin
+  ```
+- **Sopra Usage:** Primary reference for **CLI-based agent authoring** ([`copilot-studio/cli-authoring.md`](knowledge/copilot-studio/cli-authoring.md)), the **agentic-loop architecture** ([`copilot-studio/patterns/agentic-loop.md`](knowledge/copilot-studio/patterns/agentic-loop.md)), and **classic→agentic migration** ([`copilot-studio/patterns/migration-classic-to-agentic.md`](knowledge/copilot-studio/patterns/migration-classic-to-agentic.md)).
+- **Divergences:** Sopra layers its naming conventions, `spr_` solution prefix, and environment-ring promotion rules on top of the plugin's generated output. We also require human review of all generated YAML before push.
+- **⚠️ Experimental — read before relying on it:** Microsoft explicitly states this is *"an experimental research project, not an officially supported Microsoft product,"* that *"the Copilot Studio YAML schema may change without notice,"* and that it is **"not meant for production use."** Sopra treats plugin output as a **draft accelerator only**: always review generated YAML, validate it, and test in DEV before promoting. Never push plugin-generated YAML directly to UAT or PROD.
+
+---
+
+### 3b. `microsoft/skills-for-copilot-studio` — ⚠️ SUPERSEDED
 
 - **URL:** https://github.com/microsoft/skills-for-copilot-studio
-- **Description:** Official Copilot Studio agent skill definitions for use with GitHub Copilot CLI and VS Code. These SKILL.md files give Copilot context to assist with Copilot Studio YAML authoring, topic design, action wiring, and deployment.
-- **Sopra Usage:** Source for the skills stored in `.agents/skills/` and `.github/skills/`. We copy and optionally extend these files rather than maintaining a fork.
-- **Divergences:** Sopra adds a `sopra-conventions` section to the `advisor` skill that references our naming conventions and environment strategy. Upstream skills are updated quarterly.
+- **Status:** **Superseded by `microsoft/copilot-studio-plugin`** (entry 3). Retained here for historical traceability only.
+- **Description:** The original Copilot Studio agent skill definitions for GitHub Copilot CLI and VS Code, giving Copilot context for Copilot Studio YAML authoring, topic design, action wiring, and deployment.
+- **Sopra Usage:** **Do not use for new work.** Any Sopra content still derived from this repo should be re-based onto the successor plugin at the next quarterly review.
+- **Divergences:** Historical. The `sopra-conventions` extension previously maintained against the upstream `advisor` skill is no longer tracked.
 
 ---
 
@@ -96,12 +114,12 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 
 ---
 
-### 11. `microsoft/skills-for-copilot-studio`
+### 11. `microsoft/cat-agent-skills` (gallery)
 
-- **URL:** https://github.com/microsoft/skills-for-copilot-studio
-- **Description:** Official Copilot Studio skills repository with reusable skill files and agent-authoring guidance.
-- **Sopra Usage:** Primary reference for Copilot Studio skill structure, phrasing, and instruction style.
-- **Divergences:** Sopra adds workflow artifacts, repo-local storage, and our own stage-based process model.
+- **URL:** https://microsoft.github.io/cat-agent-skills/?tag=productivity
+- **Description:** Microsoft CAT's public gallery of agent skill examples — useful for skill structure, phrasing, and instruction style.
+- **Sopra Usage:** Reference when tuning the skills in `skills/` and the commands in `commands/`.
+- **Divergences:** Sopra adapts examples into our own workflow stages, artifact model, and Power Platform conventions.
 
 ---
 
@@ -155,12 +173,21 @@ Each quarter (January, April, July, October), a designated team member runs the 
 |--------------|-----------------|
 | `microsoft/powerplatform-actions` | Pin to latest patch in prod workflows; `@latest` in dev |
 | `microsoft/powerplatform-build-tools` | Pin to extension version in ADO pipeline |
-| `microsoft/skills-for-copilot-studio` | Copy at review time; note the commit SHA in this file |
+| `microsoft/copilot-studio-plugin` | Record plugin version (`mcs-assistant` vX.Y.Z) and minimum `pac` version here at each review; plugin is experimental and may change without notice |
+| `microsoft/skills-for-copilot-studio` | **Superseded** — no longer tracked; retained for history only |
 | `microsoft/power-cat-skills` | Reference only; review quarterly for workflow skill ideas |
 | All others | Reference only; no version pinning required |
 
 ### Last Review
 
-- **Date:** 2026-08-21
+- **Date:** 2026-08-22
 - **Reviewer:** Sopra Platform Team
-- **Notes:** Initial population of this file. All refs are current as of August 2026.
+- **Notes:**
+  - Added `microsoft/copilot-studio-plugin` as the primary Copilot Studio reference. Reviewed at
+    plugin `mcs-assistant` **v1.0.2**; requires **`pac` > 2.9.3**.
+  - Marked `microsoft/skills-for-copilot-studio` as **superseded** by the above and removed the
+    duplicate entry that previously listed it twice (as items 3 and 11).
+  - Derived three new documents from the plugin: `copilot-studio/cli-authoring.md`,
+    `copilot-studio/patterns/agentic-loop.md`, and
+    `copilot-studio/patterns/migration-classic-to-agentic.md`.
+  - **Next review must re-verify the YAML schema** — Microsoft states it may change without notice.

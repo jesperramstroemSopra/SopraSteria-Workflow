@@ -1,95 +1,134 @@
-# Sopra-Workflow Agent Guide
+# Sopra-Workflow — Agent Guide
 
-This repo is a reusable Power Platform knowledge base and workflow hub for Copilot Studio, Power Automate, Dataverse, and Solutions/ALM work.
+**This file applies when you are working *on the toolkit itself*.** If you are using the toolkit to
+deliver a client project, read `skills/sw-overview/SKILL.md` instead — that is the operating guide.
 
-## Repo purpose
+Sopra-Workflow is a **plugin**: a stage-aware Power Platform delivery toolkit that installs into
+GitHub Copilot CLI and Claude and attaches to any client project.
 
-- Store Sopra-specific architecture guidance
-- Store reusable skill instructions
-- Keep workflow artifacts for analysis, planning, implementation, and testing
-- Track upstream inspiration sources separately from Sopra-specific guidance
+## The distinction that matters most
+
+| | The toolkit | The client project |
+|---|---|---|
+| What it holds | Skills, commands, generalized knowledge | The customer's solution and delivery artifacts |
+| Where | This repository | Whatever workspace the user has open |
+| Client data | **Never** | Yes, under `.sopra/workflow/` |
+
+Client-identifying information must never be committed here — no customer names, environment URLs,
+tenant or environment IDs, publisher prefixes, user names, or business-revealing schema names.
 
 ## Structure
 
 ```text
-C:\Sopra-Workflow\
-├── AGENTS.md
-├── README.md
-├── UPSTREAM_REFS.md
-├── shared\
-├── copilot-studio\
-├── power-automate\
-├── dataverse\
-├── solutions\
-├── .github\
-│   ├── skills\
-│   └── extensions\
-└── .goals\
+<repo-root>/
+├── .github/plugin/plugin.json     GitHub Copilot manifest  (skills: skills/)
+├── .claude-plugin/
+│   ├── plugin.json                Claude manifest
+│   └── marketplace.json           Self-hosted marketplace listing
+├── commands/                      /sw-* slash commands (thin, delegate to skills)
+├── skills/
+│   ├── sw-overview/               Router + operating conventions — read first
+│   ├── design-solution/           Greenfield architecture
+│   ├── analyze-project/  present-analysis/  grill-me/
+│   ├── create-plan/  review-plan/  implement-plan/  test-solution/
+│   ├── draw-architecture/  review-agent-yaml/
+│   └── capture-learning/          Feeds playbooks/
+├── knowledge/                     The Sopra standard, per service
+│   ├── copilot-studio/  power-automate/  agent-flows/
+│   ├── dataverse/  solutions/  shared/
+├── playbooks/                     Field-learned lessons (client-scrubbed)
+├── templates/                     Assets to copy into client projects
+└── AGENTS.md  README.md  CHANGELOG.md  UPSTREAM_REFS.md
 ```
 
-## How skills are composed
+## Commands vs skills
 
-The workflow is split into stage-based skills:
+- **Commands** (`commands/sw-*.md`) are thin. Frontmatter (`description`, `argument-hint`,
+  `allowed-tools`), a `$ARGUMENTS` line, and a delegation to the skill. Keep logic *out* of them.
+- **Skills** (`skills/<name>/SKILL.md`) hold the actual instructions. They also trigger from natural
+  language, so the `description` must state *when to use it*, not just what it does.
 
-- `analyze-project`
-- `present-analysis`
-- `grill-me`
-- `create-plan`
-- `review-plan`
-- `implement-plan`
-- `test-solution`
-- `draw-architecture`
+Adding a stage means adding **both**, and listing it in `sw-overview` and the README table.
 
-Each stage should:
+## Path rules
 
-1. Read the relevant repo docs.
-2. Read the prior workflow artifacts from `.goals/workflow/`.
-3. Save its output back to disk.
-4. Preserve enough state for later restart.
+Skills are read from wherever the plugin is installed, while the working directory is the *client
+project*. So:
 
-## Shared vs stage skills
-
-- **Shared skill docs** hold the reusable workflow logic and stage rules.
-- **Stage SKILL.md files** expose each skill as an individual reusable skill.
-- **Extensions** provide executable tool access where needed.
+- Knowledge references from a skill: `../../knowledge/<domain>/...`
+- Playbook references from a skill: `../../playbooks/...`
+- Artifacts always go to `.sopra/workflow/<stage>/` **in the open workspace**, never in this repo.
+- Never use absolute paths, and never assume the toolkit is the open workspace.
 
 ## Source of truth
 
-When working in this repo, prefer these docs in order:
+When working in this repo, prefer in order:
 
-1. `AGENTS.md`
-2. `README.md`
-3. `UPSTREAM_REFS.md`
-4. `shared/upstream-skill-examples.md`
-5. Domain architecture docs under `copilot-studio/`, `power-automate/`, `dataverse/`, `solutions/`
+1. `AGENTS.md` (this file)
+2. `skills/sw-overview/SKILL.md` — the operating conventions
+3. `README.md`
+4. `knowledge/<domain>/ARCHITECTURE.md` and `knowledge/<domain>/patterns/`
+5. `playbooks/` — overrides generic guidance when it contradicts field experience, *if* the entry is
+   `confirmed` and recently verified
+6. `UPSTREAM_REFS.md`, `knowledge/shared/upstream-skill-examples.md`
 
-## Workflow artifacts
+For Copilot Studio the entry point depends on the architecture:
 
-Use `.goals/workflow/` for all run-time outputs:
+- Modern → `knowledge/copilot-studio/patterns/agentic-loop.md`, then `knowledge/copilot-studio/cli-authoring.md`
+- Classic → `knowledge/copilot-studio/ARCHITECTURE.md`
+- Migration → `knowledge/copilot-studio/patterns/migration-classic-to-agentic.md`
 
-- `analyze-project/`
-- `present-analysis/`
-- `grill-me/`
-- `create-plan/`
-- `review-plan/`
-- `implement-plan/`
-- `test-solution/`
+## Copilot Studio: know which architecture you are in
+
+Two architectures, and guidance is **not** interchangeable.
+
+| Signal | Architecture | Authoritative doc |
+|---|---|---|
+| `topics/`, `actions/` folders; `recognizer.kind` is not a CLI recognizer | Classic | `knowledge/copilot-studio/ARCHITECTURE.md` |
+| `behaviors/`, `capabilities/` folders; `recognizer.kind` is `CLICopilotRecognizer` or `CLIAgentRecognizer` | Agentic loop | `knowledge/copilot-studio/patterns/agentic-loop.md` |
+
+Determine this **before** giving advice or reviewing anything. In the agentic loop there are no
+topics, no Power Fx, and no global or topic variables — advice assuming them is simply wrong.
+
+Sopra default for new agents is the agentic loop.
+
+## Versioning
+
+Three files carry the version and **must stay in sync**:
+
+- `.github/plugin/plugin.json`
+- `.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`
+
+Bump on any change to skills, commands or knowledge, and record it in `CHANGELOG.md`. An unbumped
+version means installed copies silently go stale.
+
+## Testing changes
+
+```powershell
+copilot --plugin-dir <path-to-this-repo> plugin list   # confirms it mounts
+```
+
+Note: `copilot skill list` does **not** report skills from `--plugin-dir` plugins — absence there is
+not a failure. To exercise the skills end to end, run a Copilot session with `--plugin-dir` and
+invoke a command.
 
 ## External inspiration
 
-Use upstream repos only as inspiration:
+Use upstream repos as inspiration only — never copy verbatim. Translate into Sopra conventions and
+document divergences.
 
-- `microsoft/power-cat-skills`
-- `microsoft/skills-for-copilot-studio`
-- Microsoft CAT agent skills gallery
+- `microsoft/copilot-studio-plugin` — **current** source of truth for Copilot Studio agent authoring,
+  the agentic-loop architecture, and classic→agentic migration
+- `microsoft/power-cat-skills`, Microsoft CAT agent skills gallery
 
-Do not copy content verbatim. Translate it into Sopra conventions and document divergences.
+`microsoft/skills-for-copilot-studio` is **superseded**. Do not use it for new work, and note that
+having both installed produces duplicate, conflicting agents.
 
 ## Convention rules
 
-- Keep skill names aligned with their stage.
-- Keep language direct and actionable.
-- Reference the correct architecture guide before giving advice.
+- Command names are `sw-<verb>`; skill names describe the stage.
+- Keep language direct and actionable. No filler.
+- Every skill must ask clarifying questions rather than assume project specifics.
 - Prefer file-backed state over ephemeral chat state.
-- Use the repo docs when suggesting improvements to skills or workflow behavior.
-
+- No stub content. If you touch a stub, fill it in.

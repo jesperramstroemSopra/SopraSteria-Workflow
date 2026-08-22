@@ -18,13 +18,21 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
 ## What you do
 
 1. **Discover the project.** Scan the workspace for relevant artifacts:
-   - Copilot Studio: `**/agent.mcs.yml`, `**/topics/*.mcs.yml`, `**/actions/*.mcs.yml`, `**/settings.mcs.yml`
+   - Copilot Studio (modern / agentic-loop): `**/settings.mcs.yml`, `**/behaviors/*.mcs.yml`, `**/capabilities/tools/*.mcs.yml`, `**/capabilities/knowledge/*.mcs.yml`
+   - Copilot Studio (classic): `**/agent.mcs.yml`, `**/topics/*.mcs.yml`, `**/actions/*.mcs.yml`
    - Power Automate: flow definition JSON files, solution zips
    - Dataverse: table definitions, security role XML, plugin code
    - Solutions: solution.xml, customizations.xml, environment variable definitions
 
+   Identify **which Copilot Studio architecture** you are looking at before evaluating: a `topics/`
+   folder means classic; `behaviors/` and `capabilities/` mean agentic-loop. Confirm with
+   `configuration.recognizer.kind` in `settings.mcs.yml` (`CLICopilotRecognizer` /
+   `CLIAgentRecognizer` = modern). Reviewing a modern agent against classic rules produces nonsense
+   findings, and vice versa.
+
 2. **Read the Sopra architecture guides.** Load and reference the relevant docs from this repo:
-   - `copilot-studio/ARCHITECTURE.md` and `copilot-studio/patterns/*.md`
+   - Copilot Studio (modern): `copilot-studio/patterns/agentic-loop.md`, `copilot-studio/cli-authoring.md`
+   - Copilot Studio (classic): `copilot-studio/ARCHITECTURE.md` and `copilot-studio/patterns/*.md`
    - `power-automate/ARCHITECTURE.md` and `power-automate/patterns/*.md`
    - `dataverse/ARCHITECTURE.md` and `dataverse/patterns/*.md`
    - `solutions/ARCHITECTURE.md` and `solutions/patterns/*.md`

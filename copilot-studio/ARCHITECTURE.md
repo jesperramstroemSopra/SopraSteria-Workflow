@@ -1,8 +1,26 @@
-## Copilot Studio Architecture Guide
+## Copilot Studio Architecture Guide (Classic / Topic-Based)
+
+> **⚠️ Scope: this document describes the CLASSIC, topic-based architecture.**
+>
+> Copilot Studio now has two architectures. Everything below — topics, trigger phrases, Power Fx,
+> global and topic variables — applies to **classic** agents only. None of it exists in the modern
+> **agentic-loop** architecture.
+>
+> | If you are… | Read |
+> |---|---|
+> | Building a **new** agent | [`patterns/agentic-loop.md`](patterns/agentic-loop.md) **first** |
+> | Authoring YAML in source control | [`cli-authoring.md`](cli-authoring.md) |
+> | Converting an existing classic agent | [`patterns/migration-classic-to-agentic.md`](patterns/migration-classic-to-agentic.md) |
+> | Maintaining an existing **classic** agent | This document |
+>
+> **Sopra default for new agents is the agentic-loop architecture.** Use classic only when a
+> requirement in [`patterns/agentic-loop.md` §1](patterns/agentic-loop.md#1-two-architectures-one-product)
+> forces it.
 
 ## Overview
 
-This document defines the architecture principles, design decisions, and Sopra conventions for building Copilot Studio agents. Read this before designing any new agent.
+This document defines the architecture principles, design decisions, and Sopra conventions for
+building **classic** Copilot Studio agents. Read this before designing or changing any classic agent.
 
 ---
 

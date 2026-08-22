@@ -14,7 +14,10 @@ This repository is the single source of truth for:
 - **Naming conventions and environment strategy** shared across all projects
 - **Upstream reference tracking** so the team stays aligned with Microsoft's evolving best practices
 
-All content is substantive and production-ready. No placeholders.
+Content maturity varies by section. The `copilot-studio/` section and `shared/tools-and-setup.md` are
+substantive and current. Several pattern files under `dataverse/`, `power-automate/`, and `solutions/`
+are still short stubs — see **Known gaps** in [`CHANGELOG.md`](CHANGELOG.md). When you touch a stub,
+fill it in rather than extending it.
 
 ---
 
@@ -22,10 +25,12 @@ All content is substantive and production-ready. No placeholders.
 
 | Folder | Contents |
 |--------|----------|
-| `.agents/skills/` | Copilot Studio agent skill definitions (SKILL.md files) for use in VS Code / GitHub Copilot CLI |
-| `.github/skills/` | GitHub Copilot CLI skill definitions for this repo |
+| `.agents/skills/` | Domain skills (`<name>/SKILL.md`) for Copilot Studio agent authoring and review |
+| `.github/skills/` | Workflow-stage skills (analyze → plan → implement → test) for this repo |
+| `.github/extensions/` | Copilot CLI extensions providing executable tool access |
 | `.github/workflows/` | GitHub Actions CI/CD workflows for Power Platform solution export/import |
-| `copilot-studio/` | Architecture docs, design patterns, and skills for Copilot Studio agents |
+| `.goals/` | Workflow run artifacts and goal tracking |
+| `copilot-studio/` | Architecture docs (classic **and** agentic-loop), CLI authoring, design patterns |
 | `power-automate/` | Architecture docs and patterns for Power Automate cloud flows |
 | `dataverse/` | Architecture docs, table design patterns, and admin scripts for Dataverse |
 | `solutions/` | ALM/solutions architecture, pipeline patterns, and environment strategy |
@@ -50,7 +55,9 @@ Before creating any artifact, read [`shared/naming-conventions.md`](shared/namin
 
 ### 3. Set Up Your Developer Environment
 
-Follow [`shared/tools-and-setup.md`](shared/tools-and-setup.md) to install PAC CLI, VS Code extensions, and configure authentication.
+Follow [`shared/tools-and-setup.md`](shared/tools-and-setup.md) to install the Power Platform CLI
+(**`pac` > 2.9.3**), the `mcs-assistant` Copilot Studio plugin, VS Code extensions, and to configure
+authentication.
 
 ### 4. Set Up CI/CD
 
@@ -64,28 +71,47 @@ Skills are Markdown files that GitHub Copilot reads to understand specialized do
 
 ### Copilot Studio Agent Skills (`.agents/skills/`)
 
-These enable GitHub Copilot CLI and VS Code Copilot to assist with Copilot Studio authoring.
+These enable GitHub Copilot CLI and VS Code Copilot to assist with Copilot Studio authoring. Each
+skill is a **folder** containing a `SKILL.md`.
 
 **To install in your project:**
 
 ```powershell
 # From your project root
 New-Item -ItemType Directory -Force -Path ".agents\skills"
-Copy-Item -Path "C:\Sopra-Workflow\.agents\skills\*.md" -Destination ".agents\skills\"
+Copy-Item -Recurse -Path "<path-to-this-repo>\.agents\skills\*" -Destination ".agents\skills\"
 ```
 
-After copying, GitHub Copilot CLI will automatically discover the skills and make them available as `/skill-name` commands.
+After copying, GitHub Copilot CLI will automatically discover the skills and make them available as
+`/skill-name` commands.
 
 ### GitHub Copilot CLI Skills (`.github/skills/`)
 
-These provide repo-level context to GitHub Copilot.
+These provide repo-level workflow context to GitHub Copilot.
 
 ```powershell
 New-Item -ItemType Directory -Force -Path ".github\skills"
-Copy-Item -Path "C:\Sopra-Workflow\.github\skills\*.md" -Destination ".github\skills\"
+Copy-Item -Recurse -Path "<path-to-this-repo>\.github\skills\*" -Destination ".github\skills\"
 ```
 
 See [`.agents/skills/README.md`](.agents/skills/README.md) and [`.github/skills/README.md`](.github/skills/README.md) for full details.
+
+---
+
+## Copilot Studio: Which Architecture?
+
+Copilot Studio now has **two architectures**, and most older guidance describes only the first:
+
+| | Classic | Agentic loop (modern) |
+|---|---|---|
+| Building block | Topics | Instructions, Knowledge, Tools, Skills |
+| Authoring | Maker portal | Portal **or** CLI/YAML in source control |
+| Power Fx & variables | Supported | **Not supported** |
+
+**Sopra default for new agents is the agentic loop.** Start at
+[`copilot-studio/patterns/agentic-loop.md`](copilot-studio/patterns/agentic-loop.md), then
+[`copilot-studio/cli-authoring.md`](copilot-studio/cli-authoring.md). To modernise an existing agent,
+see [`copilot-studio/patterns/migration-classic-to-agentic.md`](copilot-studio/patterns/migration-classic-to-agentic.md).
 
 ---
 
@@ -122,11 +148,18 @@ This repo does **not** fork or directly import upstream repositories. Instead:
 
 ### Skill example sources
 
-When reviewing or improving skills, also search the Microsoft CAT agent skills gallery for examples:
+When reviewing or improving skills, use the sources tracked in
+[`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) — in particular
+[`microsoft/copilot-studio-plugin`](https://github.com/microsoft/copilot-studio-plugin), the current
+source of truth for Copilot Studio agent authoring, and the Microsoft CAT agent skills gallery:
 
 - https://microsoft.github.io/cat-agent-skills/?tag=productivity
 
-Use it as an inspiration source only. Adapt patterns into Sopra-specific skills and docs instead of copying them verbatim.
+Use these as inspiration sources only. Adapt patterns into Sopra-specific skills and docs instead of
+copying them verbatim.
+
+> **Note:** `microsoft/skills-for-copilot-studio` is **superseded** by `microsoft/copilot-studio-plugin`.
+> Do not use it as a source for new work.
 
 See [`shared/upstream-skill-examples.md`](shared/upstream-skill-examples.md) for the canonical list of external skill inspiration sources.
 

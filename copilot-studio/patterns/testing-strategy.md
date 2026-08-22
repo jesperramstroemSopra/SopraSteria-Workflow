@@ -1,5 +1,65 @@
 # Testing Strategy for Copilot Studio Agents
 
+> **⚠️ Architecture note.** Sections 1–2 below are written around **classic** agents — topic routing,
+> PPAPI topic evaluation, DirectLine. For **agentic-loop** agents there are no topics to route to, and
+> DirectLine is not the test channel. See [§0](#0-testing-agentic-loop-agents) first if you are
+> testing a CLI-authored agent.
+
+## 0. Testing Agentic-Loop Agents
+
+<!-- Upstream: microsoft/copilot-studio-plugin — commands/chat.md (accessed 2026-08-22). -->
+
+### What changes
+
+| | Classic | Agentic loop |
+|---|---|---|
+| Channel | DirectLine / Test panel | **agenticruntime** endpoint |
+| Unit of assertion | Correct **topic** matched | Correct **tool/skill** selected and correct outcome |
+| Published required? | No (PPAPI evaluates drafts) | **Yes** — an unpublished agent returns HTTP 404 |
+| Auth | Channel key | Entra public client + MSAL device code |
+
+### Preconditions
+
+1. The agent must be **CLI-authored**. Check `configuration.recognizer.kind` in `settings.mcs.yml`:
+   `CLICopilotRecognizer` or `CLIAgentRecognizer`. Anything else is not served by this endpoint.
+2. The agent must be **published**:
+   ```powershell
+   pac copilot publish --bot "<bot-id>" --environment "<environment-id>"
+   ```
+   A freshly cloned agent is unpublished. A 404 almost always means "not published", not "broken".
+3. A one-time Entra **public client** app registration with delegated
+   `CopilotStudio.Copilots.Invoke` on the Power Platform API, redirect URI `http://localhost`
+   (HTTP, not HTTPS). See [`../../shared/tools-and-setup.md`](../../shared/tools-and-setup.md#4-testing-prerequisites-entra-app-registration).
+
+### What to assert
+
+Because the loop is non-deterministic, do **not** assert on exact wording. Assert on:
+
+| Assertion | Why |
+|---|---|
+| **Correct tool/skill selected** | The primary failure mode. Usually caused by weak tool descriptions. |
+| **Side effects occurred exactly once** | The loop can retry; confirm no duplicate records or emails. |
+| **Required confirmation was requested** before any destructive or costly action | Instruction compliance. |
+| **Scope refusals hold** — out-of-scope questions are declined | There is no topic structure enforcing this. |
+| **Escalation path fires** on the conditions in the instructions | Same reason. |
+| **No PII or secret leakage** in responses | Safety rules live only in instructions. |
+| **Grounding/citations present** for knowledge-backed answers | Detects hallucination. |
+| Response latency within budget | The loop may make several tool calls per turn. |
+
+Run each scenario **more than once**. A test that passes once on a non-deterministic system has told
+you very little. Sopra standard: 3 runs per critical scenario, all must pass.
+
+### Sopra requirements
+
+- Every capability in the agent's capabilities table needs at least one scenario.
+- Every **adversarial** case — prompt injection, scope probing, PII extraction — must be tested before
+  production, because instructions are the only control.
+- After a migration, run the classic agent's regression utterances against the migrated agent and
+  compare outcomes. See
+  [`migration-classic-to-agentic.md` §4](migration-classic-to-agentic.md#4-after-the-push).
+
+---
+
 ## Overview
 
 Testing Copilot Studio agents requires a layered approach: topic-level unit tests, conversation flow tests, regression suites, and CI/CD integration. This document covers all four layers and provides a framework for test case structure.

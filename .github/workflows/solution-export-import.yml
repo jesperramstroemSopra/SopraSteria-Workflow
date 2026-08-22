@@ -1,0 +1,233 @@
+name: Power Platform Solution Export and Import
+
+# Triggers:
+# - workflow_dispatch: Manual trigger with configurable inputs
+# - push to main: Automatically export solution and import to TEST environment
+# - pull_request: Validate solution with Solution Checker
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment_url:
+        description: "Source Power Platform environment URL (e.g. https://sopra-dev.crm4.dynamics.com)"
+        required: true
+        type: string
+      solution_name:
+        description: "Unique name of the solution to export"
+        required: true
+        type: string
+      target_environment_url:
+        description: "Target environment URL for import (leave blank to skip import)"
+        required: false
+        type: string
+
+  push:
+    branches:
+      - main
+    paths:
+      - "solutions/**"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "solutions/**"
+
+env:
+  # Default solution name — override via workflow_dispatch input or repo variable
+  SOLUTION_NAME: ${{ github.event.inputs.solution_name || vars.DEFAULT_SOLUTION_NAME || 'SPR_Core' }}
+  # Source environment (DEV) — override via workflow_dispatch input or secret
+  SOURCE_ENV_URL: ${{ github.event.inputs.environment_url || secrets.PP_DEV_URL }}
+  # Target environment — override via workflow_dispatch input or secret
+  TARGET_ENV_URL: ${{ github.event.inputs.target_environment_url || secrets.PP_TARGET_URL }}
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB: Export Solution from DEV environment
+  # Runs on: push to main OR manual trigger (not on pull_request)
+  # ─────────────────────────────────────────────────────────────────────────
+  export-solution:
+    name: Export Solution from DEV
+    runs-on: windows-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      # Step 1: Check out the repository so we can commit exported solution files
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      # Step 2: Authenticate to Power Platform using service principal credentials
+      # The service principal must have System Administrator role in the source environment
+      - name: Authenticate to Power Platform (DEV)
+        uses: microsoft/powerplatform-actions/who-am-i@latest
+        with:
+          environment-url: ${{ env.SOURCE_ENV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      # Step 3: Export the UNMANAGED solution for source control
+      # Unmanaged exports allow the solution to be unpacked and committed to git
+      - name: Export Unmanaged Solution
+        uses: microsoft/powerplatform-actions/export-solution@latest
+        with:
+          environment-url: ${{ env.SOURCE_ENV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          solution-name: ${{ env.SOLUTION_NAME }}
+          solution-output-file: solutions/${{ env.SOLUTION_NAME }}_unmanaged.zip
+          managed: false
+
+      # Step 4: Export the MANAGED solution for deployment to higher environments
+      - name: Export Managed Solution
+        uses: microsoft/powerplatform-actions/export-solution@latest
+        with:
+          environment-url: ${{ env.SOURCE_ENV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          solution-name: ${{ env.SOLUTION_NAME }}
+          solution-output-file: solutions/${{ env.SOLUTION_NAME }}_managed.zip
+          managed: true
+
+      # Step 5: Unpack the unmanaged solution into source-controlled folder structure
+      # This converts the zip into individual component files for diff-friendly storage
+      - name: Unpack Solution (source control format)
+        uses: microsoft/powerplatform-actions/unpack-solution@latest
+        with:
+          solution-file: solutions/${{ env.SOLUTION_NAME }}_unmanaged.zip
+          solution-folder: solutions/src/${{ env.SOLUTION_NAME }}
+          solution-type: Unmanaged
+          overwrite-files: true
+
+      # Step 6: Upload managed solution zip as a workflow artifact for the import job
+      - name: Upload Managed Solution Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SOLUTION_NAME }}_managed
+          path: solutions/${{ env.SOLUTION_NAME }}_managed.zip
+          retention-days: 30
+
+      # Step 7: Upload unmanaged solution zip as a workflow artifact (for backup/audit)
+      - name: Upload Unmanaged Solution Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.SOLUTION_NAME }}_unmanaged
+          path: solutions/${{ env.SOLUTION_NAME }}_unmanaged.zip
+          retention-days: 30
+
+      # Step 8: Commit the unpacked solution files back to the repository
+      # This keeps source control in sync with the DEV environment after every push to main
+      - name: Commit Unpacked Solution to Repository
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add solutions/src/
+          git diff --staged --quiet || git commit -m "chore: export solution ${{ env.SOLUTION_NAME }} from DEV [skip ci]"
+          git push
+        shell: pwsh
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB: Validate Solution with Solution Checker (on Pull Request)
+  # ─────────────────────────────────────────────────────────────────────────
+  validate-solution:
+    name: Validate Solution (Solution Checker)
+    runs-on: windows-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Authenticate to run Solution Checker
+      - name: Authenticate to Power Platform
+        uses: microsoft/powerplatform-actions/who-am-i@latest
+        with:
+          environment-url: ${{ secrets.PP_DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      # Pack the unpacked solution files back into a zip for the checker
+      - name: Pack Solution for Validation
+        uses: microsoft/powerplatform-actions/pack-solution@latest
+        with:
+          solution-folder: solutions/src/${{ env.SOLUTION_NAME }}
+          solution-file: solutions/${{ env.SOLUTION_NAME }}_check.zip
+          solution-type: Unmanaged
+
+      # Run Solution Checker — reports issues as annotations on the PR
+      - name: Run Solution Checker
+        uses: microsoft/powerplatform-actions/check-solution@latest
+        with:
+          environment-url: ${{ secrets.PP_DEV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          path: solutions/${{ env.SOLUTION_NAME }}_check.zip
+          # Fail the workflow if high-severity issues are found
+          checker-logs-artifact-name: solution-checker-logs
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # JOB: Import Solution to Target Environment
+  # Runs on: push to main OR manual trigger (after export job succeeds)
+  # Only runs if TARGET_ENV_URL is set
+  # ─────────────────────────────────────────────────────────────────────────
+  import-solution:
+    name: Import Solution to Target Environment
+    runs-on: windows-latest
+    needs: export-solution
+    if: |
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      env.TARGET_ENV_URL != ''
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 1: Download the managed solution artifact produced by the export job
+      - name: Download Managed Solution Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.SOLUTION_NAME }}_managed
+          path: solutions/
+
+      # Step 2: Authenticate to the TARGET environment
+      - name: Authenticate to Power Platform (Target)
+        uses: microsoft/powerplatform-actions/who-am-i@latest
+        with:
+          environment-url: ${{ env.TARGET_ENV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+
+      # Step 3: Import the managed solution to the target environment
+      # - upgrade: true replaces the previous version cleanly
+      # - publish-changes: true publishes all customizations after import
+      # - skip-dependency-check: false ensures all dependencies are present
+      - name: Import Managed Solution to Target
+        uses: microsoft/powerplatform-actions/import-solution@latest
+        with:
+          environment-url: ${{ env.TARGET_ENV_URL }}
+          app-id: ${{ secrets.PP_CLIENT_ID }}
+          client-secret: ${{ secrets.PP_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.PP_TENANT_ID }}
+          solution-file: solutions/${{ env.SOLUTION_NAME }}_managed.zip
+          force-overwrite: true
+          publish-changes: true
+          skip-dependency-check: false
+          run-asynchronously: true
+          max-async-wait-time: 60
+
+      # Step 4: Log the deployment outcome
+      - name: Deployment Summary
+        if: always()
+        run: |
+          Write-Host "Solution: ${{ env.SOLUTION_NAME }}"
+          Write-Host "Target Environment: ${{ env.TARGET_ENV_URL }}"
+          Write-Host "Triggered by: ${{ github.event_name }}"
+          Write-Host "Run ID: ${{ github.run_id }}"
+        shell: pwsh

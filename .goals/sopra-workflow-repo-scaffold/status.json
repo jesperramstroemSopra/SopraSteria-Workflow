@@ -1,0 +1,10 @@
+{
+  "goal_id": "sopra-workflow-repo-scaffold",
+  "status": "building",
+  "iteration": 1,
+  "builder_model": "Claude:Sonnet-4.6",
+  "inspector_model": "Claude:Haiku-4.5",
+  "initial_sha": "19730755fa921dd9a2d48f10a7d6ff8aa19a6f78",
+  "created_at": "2026-08-21T10:09:09.764+02:00",
+  "history": []
+}

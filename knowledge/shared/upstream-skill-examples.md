@@ -37,7 +37,7 @@ This page collects external sources used to improve Sopra workflow and domain sk
 2. Note any useful structure, tone, or output format ideas.
 3. Translate them into Sopra-specific skills and docs.
 4. Record any meaningful divergence in the relevant skill README or architecture doc, and update
-   [`../UPSTREAM_REFS.md`](../UPSTREAM_REFS.md).
+   [`../UPSTREAM_REFS.md`((../UPSTREAM_REFS.md).
 
 ## What makes a good Sopra skill
 

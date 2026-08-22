@@ -1,43 +1,84 @@
-## Skills Reuse
+# Skills
 
-This folder contains reusable GitHub Copilot skills for Sopra Power Platform work.
+Skills hold the actual instructions for each stage of Sopra Power Platform delivery. They are
+invoked two ways:
 
-### How to Reuse Skills
+- **Explicitly**, via the matching `/sw-*` command in [`../commands/`](../commands/)
+- **Implicitly**, when the agent matches the user's request against the skill's `description`
 
-1. Read the skill README before using a skill.
-2. Copy the relevant skill folder into the target project only when the skill is needed.
-3. Keep skill names aligned with the task they support.
-4. Reuse the same skill instructions across teams to keep Copilot behavior consistent.
+Because of the second path, the `description` frontmatter must describe **when to use the skill**,
+not merely what it does. That text is the only thing the router sees.
 
-### Sopra Guidance
+## Inventory
 
-- Treat skills as shared accelerators, not project-specific logic.
-- Prefer skills that encode platform conventions, validation, or repeatable setup.
-- Update the skill README when adding a new reusable skill pattern.
+| Skill | Command | Purpose |
+|---|---|---|
+| `sw-overview` | `/sw-start` | Router and operating conventions. **Read this first.** |
+| `design-solution` | `/sw-design` | Greenfield: requirements interview → options → decision record |
+| `analyze-project` | `/sw-analyze` | Evaluate an existing project: architecture, risk, quality, optimization |
+| `present-analysis` | `/sw-present` | Reformat findings for a customer or steering group |
+| `grill-me` | `/sw-grill` | Deliberately tough stress-test of a design or plan |
+| `create-plan` | `/sw-plan` | Sequenced work breakdown with dependencies and done-conditions |
+| `review-plan` | `/sw-review` | Gate check before implementation starts |
+| `implement-plan` | `/sw-implement` | Execute the plan, recording resumable progress |
+| `test-solution` | `/sw-test` | Define and run a test protocol |
+| `draw-architecture` | `/sw-draw` | Interactive HTML diagram for any scope |
+| `review-agent-yaml` | `/sw-review-yaml` | Focused review of CLI-authored Copilot Studio agent YAML |
+| `capture-learning` | `/sw-learn` | Capture a field lesson into `../playbooks/` |
 
-### Current Repo Skills
+There is no mandatory order. Stages are entry points, not a pipeline.
 
-- `workflow-skills/` — restartable workflow stages for analyze, present, grill, plan, review, implement, and test.
-- `analyze-project/` — analyze a project against Sopra architecture guides.
-- `present-analysis/` — reformat analysis into a clean stakeholder-ready report.
-- `grill-me/` — adversarial review that stress-tests work against Sopra standards.
-- `create-plan/` — convert findings into a phased task plan with dependencies.
-- `review-plan/` — gate check before implementation begins.
-- `implement-plan/` — execute the plan, track progress, resume if interrupted.
-- `test-solution/` — define test protocol, run checks, produce test report.
-- `draw-architecture/` — generate a self-contained HTML architecture diagram for any scope (solution, flows, agents, tables, or a combination).
+## Anatomy
 
-### Example sources for skill improvement
+```text
+skills/<skill-name>/
+├── SKILL.md          Required. Frontmatter + instructions.
+└── references/       Optional. Long-form material loaded on demand.
+```
 
-When tuning skills, compare them with examples from the Microsoft CAT agent skills gallery:
+Frontmatter:
 
-- https://microsoft.github.io/cat-agent-skills/?tag=productivity
+```yaml
+---
+name: analyze-project
+description: "What it does AND when to use it — this drives automatic routing."
+argument-hint: "<what the user should type after the command>"
+user-invocable: true
+---
+```
 
-Use those examples as reference material for structure and phrasing, then adapt them to Sopra conventions.
+`argument-hint` must be a string. A non-string value causes the skill to fail loading silently at
+the plugin level.
 
-See [`../../shared/upstream-skill-examples.md`](../../shared/upstream-skill-examples.md) for the full source list.
+## Path conventions
 
-### Upstream References
+A skill is read from the installed plugin, but the working directory is the **client project**.
 
-<!-- See UPSTREAM_REFS.md for any mirrored upstream skill patterns. -->
+| Target | Path from a skill |
+|---|---|
+| Knowledge base | `../../knowledge/<domain>/...` |
+| Playbooks | `../../playbooks/...` |
+| Another skill | `../<skill-name>/SKILL.md` |
+| Output artifacts | `.sopra/workflow/<stage>/` — in the open workspace |
 
+Never use absolute paths. Never assume the toolkit is the open workspace.
+
+## Writing or changing a skill
+
+1. **State when to use it** in the description, including the words a user would actually say.
+2. **Require questions.** Every skill must ask rather than assume project specifics — environment
+   URLs, publisher prefixes, licensing, and data locations are never safe to guess.
+3. **Cite the knowledge base** for each recommendation so a reviewer can check the reasoning.
+4. **Write artifacts as you go**, not at the end, so an interrupted session is still resumable.
+5. **Add the matching command** in `../commands/`, and update this table, `sw-overview`, and the
+   root `README.md`.
+6. **Bump the plugin version** in all three manifests — see [`../AGENTS.md`](../AGENTS.md).
+
+## Testing
+
+```powershell
+copilot --plugin-dir <repo-root> plugin list
+```
+
+`copilot skill list` does **not** report skills from `--plugin-dir` plugins, so absence there is not
+a failure. To exercise a skill properly, start a session with `--plugin-dir` and invoke its command.

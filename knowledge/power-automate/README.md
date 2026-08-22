@@ -8,12 +8,12 @@ This section contains architecture guidance and design patterns for building Pow
 
 | Path | Contents |
 |------|----------|
-| [`ARCHITECTURE.md`](ARCHITECTURE.md) | Architecture guide — flow type selection, naming, error handling, connections, performance, child flows, anti-patterns |
-| [`patterns/error-handling.md`](patterns/error-handling.md) | Try/catch/finally with Scope actions, run-after, failure notifications, Dataverse logging |
-| [`patterns/http-connector.md`](patterns/http-connector.md) | HTTP connector usage, auth types, pagination, JSON parsing |
-| [`patterns/child-flows.md`](patterns/child-flows.md) | Child flow patterns, input/output passing, naming, testing |
-| [`patterns/dataverse-operations.md`](patterns/dataverse-operations.md) | Dataverse CRUD, OData filters, related records, bulk operations |
-| [`templates/README.md`](templates/README.md) | Flow template storage and contribution process |
+| [`ARCHITECTURE.md`((ARCHITECTURE.md) | Architecture guide — flow type selection, naming, error handling, connections, performance, child flows, anti-patterns |
+| [`patterns/error-handling.md`((patterns/error-handling.md) | Try/catch/finally with Scope actions, run-after, failure notifications, Dataverse logging |
+| [`patterns/http-connector.md`((patterns/http-connector.md) | HTTP connector usage, auth types, pagination, JSON parsing |
+| [`patterns/child-flows.md`((patterns/child-flows.md) | Child flow patterns, input/output passing, naming, testing |
+| [`patterns/dataverse-operations.md`((patterns/dataverse-operations.md) | Dataverse CRUD, OData filters, related records, bulk operations |
+| [`templates/README.md`((templates/README.md) | Flow template storage and contribution process |
 
 ---
 
@@ -30,7 +30,7 @@ This section contains architecture guidance and design patterns for building Pow
 
 ## Sopra Flow Conventions at a Glance
 
-- **Naming**: `[ENV]-[Domain]-[Action]-[Version]` (e.g., `DEV-HR-SubmitLeaveRequest-v1`)
+- **Naming**: `[ENV(-[Domain(-[Action(-[Version(` (e.g., `DEV-HR-SubmitLeaveRequest-v1`)
 - **Solution**: All flows must live in a Dataverse solution with prefix `spr_`
 - **Error handling**: Every flow with 3+ actions must have a Scope-based error handler
 - **Connections**: Service account connections only in TEST/UAT/PROD — no personal connections
@@ -41,7 +41,7 @@ This section contains architecture guidance and design patterns for building Pow
 
 ## Related Sections
 
-- [`../solutions/ARCHITECTURE.md`](../solutions/ARCHITECTURE.md) — ALM for deploying flows
-- [`../dataverse/ARCHITECTURE.md`](../dataverse/ARCHITECTURE.md) — Dataverse integration architecture
-- [`../shared/naming-conventions.md`](../shared/naming-conventions.md) — Full naming reference
-- [`../.github/workflows/solution-export-import.yml`](../.github/workflows/solution-export-import.yml) — CI/CD for solution deployment
+- [`../solutions/ARCHITECTURE.md`((../solutions/ARCHITECTURE.md) — ALM for deploying flows
+- [`../dataverse/ARCHITECTURE.md`((../dataverse/ARCHITECTURE.md) — Dataverse integration architecture
+- [`../shared/naming-conventions.md`((../shared/naming-conventions.md) — Full naming reference
+- [`../.github/workflows/solution-export-import.yml`((../.github/workflows/solution-export-import.yml) — CI/CD for solution deployment

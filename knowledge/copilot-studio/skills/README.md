@@ -5,7 +5,7 @@ Two different things are called "skills" in this repo. Keep them straight.
 | Meaning | Where | What it is |
 |---|---|---|
 | **Copilot Studio agent skill** | `behaviors/*.mcs.yml` in an agent project | A component of an agentic-loop agent — a reusable multi-step procedure the agent itself executes (`kind: InlineAgentSkill`) |
-| **Developer tooling skill** | [`../../.agents/skills/`](../../.agents/skills/README.md), [`../../.github/skills/`](../../.github/skills/README.md) | A `SKILL.md` that teaches GitHub Copilot how to help *you* build agents |
+| **Developer tooling skill** | [`../../.agents/skills/`](../../../skills/README.md), [`../../.github/skills/`](../../../skills/README.md) | A `SKILL.md` that teaches GitHub Copilot how to help *you* build agents |
 
 ### Agent skills (components of an agent)
 
@@ -34,10 +34,10 @@ Effectiveness rules that matter in practice:
 
 ### Developer tooling skills
 
-- [`review-agent-yaml`](../../.agents/skills/review-agent-yaml/SKILL.md) — review a CLI-authored agent
+- [`review-agent-yaml`](../../../skills/review-agent-yaml/SKILL.md) — review a CLI-authored agent
   against Sopra conventions before push.
 - Workflow-stage skills (analyze, plan, implement, test) live in
-  [`../../.github/skills/`](../../.github/skills/README.md).
+  [`../../.github/skills/`](../../../skills/README.md).
 
 Copy the skill **folder** into your project:
 

@@ -77,7 +77,7 @@ Full reference: [`../shared/naming-conventions.md`](../shared/naming-conventions
 Install the Power Platform CLI (**`pac` > 2.9.3**) and the `mcs-assistant` plugin before authoring —
 see [`../shared/tools-and-setup.md`](../shared/tools-and-setup.md).
 
-Reusable review skill: [`../.agents/skills/review-agent-yaml/`](../.agents/skills/review-agent-yaml/SKILL.md).
+Reusable review skill: [`../.agents/skills/review-agent-yaml/`](../../skills/review-agent-yaml/SKILL.md).
 
 ---
 
@@ -86,5 +86,5 @@ Reusable review skill: [`../.agents/skills/review-agent-yaml/`](../.agents/skill
 - [`../solutions/ARCHITECTURE.md`](../solutions/ARCHITECTURE.md) — ALM and solution strategy for deploying agents
 - [`../shared/naming-conventions.md`](../shared/naming-conventions.md) — Full naming reference
 - [`../shared/tools-and-setup.md`](../shared/tools-and-setup.md) — `pac` CLI and plugin setup
-- [`../.agents/skills/README.md`](../.agents/skills/README.md) — Reusable agent skills
-- [`../UPSTREAM_REFS.md`](../UPSTREAM_REFS.md) — upstream sources, including the Copilot Studio plugin
+- [`../.agents/skills/README.md`](../../skills/README.md) — Reusable agent skills
+- [`../UPSTREAM_REFS.md`](../../UPSTREAM_REFS.md) — upstream sources, including the Copilot Studio plugin

@@ -1,175 +1,214 @@
-# Sopra-Workflow: Power Platform Internal Knowledge Base
+# Sopra-Workflow
 
-> Internal engineering knowledge base and reusable asset repository for Sopra teams building on Microsoft Power Platform — Copilot Studio, Power Automate, Dataverse, and ALM/Solutions.
+> A stage-aware Power Platform delivery toolkit for AI coding agents. Install it once, attach it to
+> any client project, and drive the work with explicit commands — from first architecture sketch
+> through analysis, planning, implementation and test.
 
----
-
-## Purpose
-
-This repository is the single source of truth for:
-
-- **Architecture decisions** and design patterns for each Power Platform product
-- **Reusable skills** for GitHub Copilot (CLI and VS Code) to accelerate Copilot Studio development
-- **CI/CD workflow templates** for automated solution export, validation, and deployment
-- **Naming conventions and environment strategy** shared across all projects
-- **Upstream reference tracking** so the team stays aligned with Microsoft's evolving best practices
-
-Content maturity varies by section. The `copilot-studio/` section and `shared/tools-and-setup.md` are
-substantive and current. Several pattern files under `dataverse/`, `power-automate/`, and `solutions/`
-are still short stubs — see **Known gaps** in [`CHANGELOG.md`](CHANGELOG.md). When you touch a stub,
-fill it in rather than extending it.
+Covers **Copilot Studio**, **Power Automate**, **Agent Flows**, **Dataverse** and **Solution ALM**,
+backed by Sopra Steria field knowledge that is not in the Microsoft documentation.
 
 ---
 
-## Folder Structure
+## What this is
 
-| Folder | Contents |
-|--------|----------|
-| `.agents/skills/` | Domain skills (`<name>/SKILL.md`) for Copilot Studio agent authoring and review |
-| `.github/skills/` | Workflow-stage skills (analyze → plan → implement → test) for this repo |
-| `.github/extensions/` | Copilot CLI extensions providing executable tool access |
-| `.github/workflows/` | GitHub Actions CI/CD workflows for Power Platform solution export/import |
-| `.goals/` | Workflow run artifacts and goal tracking |
-| `copilot-studio/` | Architecture docs (classic **and** agentic-loop), CLI authoring, design patterns |
-| `power-automate/` | Architecture docs and patterns for Power Automate cloud flows |
-| `dataverse/` | Architecture docs, table design patterns, and admin scripts for Dataverse |
-| `solutions/` | ALM/solutions architecture, pipeline patterns, and environment strategy |
-| `shared/` | Cross-cutting: naming conventions, environment strategy, developer setup |
+A **plugin**. It installs into GitHub Copilot CLI and Claude from the same repository, and adds:
+
+- **13 slash commands** (`/sw-*`) — explicit, discoverable entry points
+- **12 skills** — the logic behind the commands, which also trigger from natural language
+- **A knowledge base** (`knowledge/`) — the Sopra standard for each service
+- **Playbooks** (`playbooks/`) — what we learned the hard way, generalized and reusable
+
+You keep working in the **client's** repository. The toolkit rides along; it is never copied in.
 
 ---
 
-## Quick Start
+## Install
 
-### 1. Read the Architecture Overview
+> Replace `<org>` with the GitHub organisation hosting this repo.
 
-Start with the architecture document for the product area you're working on:
+**GitHub Copilot CLI**
 
-- Copilot Studio → [`copilot-studio/ARCHITECTURE.md`](copilot-studio/ARCHITECTURE.md)
-- Power Automate → [`power-automate/ARCHITECTURE.md`](power-automate/ARCHITECTURE.md)
-- Dataverse → [`dataverse/ARCHITECTURE.md`](dataverse/ARCHITECTURE.md)
-- Solutions/ALM → [`solutions/ARCHITECTURE.md`](solutions/ARCHITECTURE.md)
-
-### 2. Apply Naming Conventions
-
-Before creating any artifact, read [`shared/naming-conventions.md`](shared/naming-conventions.md).
-
-### 3. Set Up Your Developer Environment
-
-Follow [`shared/tools-and-setup.md`](shared/tools-and-setup.md) to install the Power Platform CLI
-(**`pac` > 2.9.3**), the `mcs-assistant` Copilot Studio plugin, VS Code extensions, and to configure
-authentication.
-
-### 4. Set Up CI/CD
-
-Copy `.github/workflows/solution-export-import.yml` into your project repo and configure the required secrets (see [`solutions/pipelines/README.md`](solutions/pipelines/README.md)).
-
----
-
-## How to Use Skills from This Repo
-
-Skills are Markdown files that GitHub Copilot reads to understand specialized domain knowledge and tooling. There are two kinds in this repo:
-
-### Copilot Studio Agent Skills (`.agents/skills/`)
-
-These enable GitHub Copilot CLI and VS Code Copilot to assist with Copilot Studio authoring. Each
-skill is a **folder** containing a `SKILL.md`.
-
-**To install in your project:**
-
-```powershell
-# From your project root
-New-Item -ItemType Directory -Force -Path ".agents\skills"
-Copy-Item -Recurse -Path "<path-to-this-repo>\.agents\skills\*" -Destination ".agents\skills\"
+```
+/plugin marketplace add <org>/Sopra-Workflow
+/plugin install sopra-workflow@sopra-workflow
 ```
 
-After copying, GitHub Copilot CLI will automatically discover the skills and make them available as
-`/skill-name` commands.
+or directly:
 
-### GitHub Copilot CLI Skills (`.github/skills/`)
-
-These provide repo-level workflow context to GitHub Copilot.
-
-```powershell
-New-Item -ItemType Directory -Force -Path ".github\skills"
-Copy-Item -Recurse -Path "<path-to-this-repo>\.github\skills\*" -Destination ".github\skills\"
+```
+copilot plugin install <org>/Sopra-Workflow
 ```
 
-See [`.agents/skills/README.md`](.agents/skills/README.md) and [`.github/skills/README.md`](.github/skills/README.md) for full details.
+**Claude**
+
+```
+/plugin marketplace add <org>/Sopra-Workflow
+/plugin install sopra-workflow
+```
+
+**Local development** — test changes without installing:
+
+```
+copilot --plugin-dir <path-to-this-repo>
+```
+
+Colleagues need read access to this repository, and nothing else. No admin rights, no installer, no
+file copying onto customer machines.
+
+### Update
+
+```
+copilot plugin update sopra-workflow
+```
 
 ---
 
-## Copilot Studio: Which Architecture?
+## Commands
 
-Copilot Studio now has **two architectures**, and most older guidance describes only the first:
+Run `/sw-start` if you are not sure where to begin — it inspects the project and routes you.
+
+| Command | When to use it |
+|---|---|
+| `/sw-start` | Entry point. Detects the stage, resumes work in progress, routes you |
+| `/sw-status` | Read-only report: what's done, what's open, what's next |
+| `/sw-design` | Greenfield. Requirements interview → architecture options → decision record |
+| `/sw-analyze` | Something exists. Evaluate architecture, risk, quality, optimization |
+| `/sw-present` | Reformat findings for a customer or steering group |
+| `/sw-grill` | Attack a design or plan. Deliberately tough |
+| `/sw-plan` | Turn findings into a sequenced work breakdown |
+| `/sw-review` | Gate-check the plan before anyone builds |
+| `/sw-implement` | Execute the plan, recording progress as it goes |
+| `/sw-test` | Define and run a test protocol |
+| `/sw-draw` | Interactive HTML architecture diagram for any scope |
+| `/sw-review-yaml` | Focused review of CLI-authored Copilot Studio agent YAML |
+| `/sw-learn` | Capture a field lesson into the playbooks |
+
+The stages are **not** a mandatory pipeline. Start anywhere. A mature project might only ever use
+`/sw-analyze` → `/sw-grill` → `/sw-implement`.
+
+---
+
+## How work is recorded
+
+Every stage writes to the **client project**, under `.sopra/workflow/`:
+
+```text
+.sopra/workflow/
+  _state.json              Active stage, subject, open questions
+  design-solution/
+  analyze-project/
+  grill-me/
+  create-plan/
+  implement-plan/
+  test-solution/
+  ...
+```
+
+This is what makes work resumable — a colleague on another machine runs `/sw-status` and picks up
+where you stopped. Committing `.sopra/` to the project repo is usually the right call.
+
+Artifacts are timestamped and never overwritten, so the history of decisions survives.
+
+---
+
+## Repository layout
+
+| Path | Contents |
+|---|---|
+| `.github/plugin/plugin.json` | GitHub Copilot manifest |
+| `.claude-plugin/` | Claude manifest + marketplace listing |
+| `commands/` | The `/sw-*` slash commands |
+| `skills/` | Skill definitions (`<name>/SKILL.md`) |
+| `knowledge/` | The Sopra standard, per service |
+| `playbooks/` | Field-learned lessons, generalized and client-scrubbed |
+| `templates/` | Reusable assets to copy into client projects (CI/CD workflows, etc.) |
+
+### Knowledge base
+
+| Area | Path |
+|---|---|
+| Copilot Studio | `knowledge/copilot-studio/` — classic **and** agentic loop, CLI authoring, migration |
+| Power Automate | `knowledge/power-automate/` |
+| Agent Flows | `knowledge/agent-flows/` |
+| Dataverse | `knowledge/dataverse/` |
+| Solutions / ALM | `knowledge/solutions/` |
+| Cross-cutting | `knowledge/shared/` — naming, environments, developer setup |
+
+Maturity varies. `knowledge/copilot-studio/` and `knowledge/shared/tools-and-setup.md` are
+substantive; several pattern files under `dataverse/`, `power-automate/` and `solutions/` are still
+short. See **Known gaps** in [`CHANGELOG.md`](CHANGELOG.md). **If you touch a stub, fill it in.**
+
+---
+
+## Copilot Studio: which architecture?
+
+Most older guidance describes only the first of these. Getting it wrong produces confident nonsense.
 
 | | Classic | Agentic loop (modern) |
 |---|---|---|
 | Building block | Topics | Instructions, Knowledge, Tools, Skills |
 | Authoring | Maker portal | Portal **or** CLI/YAML in source control |
 | Power Fx & variables | Supported | **Not supported** |
+| Folders on disk | `topics/`, `actions/` | `behaviors/`, `capabilities/` |
 
-**Sopra default for new agents is the agentic loop.** Start at
-[`copilot-studio/patterns/agentic-loop.md`](copilot-studio/patterns/agentic-loop.md), then
-[`copilot-studio/cli-authoring.md`](copilot-studio/cli-authoring.md). To modernise an existing agent,
-see [`copilot-studio/patterns/migration-classic-to-agentic.md`](copilot-studio/patterns/migration-classic-to-agentic.md).
+Authoritative check: `configuration.recognizer.kind` in `settings.mcs.yml` —
+`CLICopilotRecognizer` or `CLIAgentRecognizer` means agentic loop.
 
----
-
-## How to Contribute
-
-1. **Branch from `main`** using the convention: `feat/`, `fix/`, `docs/`, `chore/` prefix
-   ```
-   git checkout -b docs/add-pa-connector-pattern
-   ```
-
-2. **Write substantive content** — no stub files. Every `.md` must have real guidance, examples, and code blocks where appropriate.
-
-3. **Follow the naming conventions** in [`shared/naming-conventions.md`](shared/naming-conventions.md).
-
-4. **Open a Pull Request** against `main` with a description of what you added and why.
-
-5. **Reference upstream material** if you adapted from one of the upstream repos in [`UPSTREAM_REFS.md`](UPSTREAM_REFS.md), add a comment in the file noting the source and any Sopra-specific divergence.
+**Sopra default for new agents is the agentic loop.** Start with
+[`knowledge/copilot-studio/patterns/agentic-loop.md`](knowledge/copilot-studio/patterns/agentic-loop.md),
+then [`knowledge/copilot-studio/cli-authoring.md`](knowledge/copilot-studio/cli-authoring.md). To
+modernise an existing agent, see
+[`knowledge/copilot-studio/patterns/migration-classic-to-agentic.md`](knowledge/copilot-studio/patterns/migration-classic-to-agentic.md).
 
 ---
 
-## How to Sync Inspiration from Upstream Refs
+## Contributing
 
-This repo does **not** fork or directly import upstream repositories. Instead:
+The toolkit is only as good as what gets fed back into it.
 
-1. Review the upstream repos listed in [`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) quarterly.
-2. When you find a pattern or example worth adapting, copy the relevant insight into the appropriate pattern file.
-3. Add a comment block like this at the top of the section:
+**After every engagement, run `/sw-learn`** for anything you learned that was not in the docs. That
+is the whole point of the playbooks — see [`playbooks/README.md`](playbooks/README.md).
 
-   ```markdown
-   <!-- Upstream: microsoft/powerplatform-actions v2.8 — adapted for Sopra service principal auth pattern -->
-   ```
+1. Branch using `feat/`, `fix/`, `docs/` or `chore/`.
+2. Write substantive content. No stubs.
+3. Follow [`knowledge/shared/naming-conventions.md`](knowledge/shared/naming-conventions.md).
+4. Bump `version` in **both** `.github/plugin/plugin.json` and `.claude-plugin/plugin.json`, plus
+   `.claude-plugin/marketplace.json` — they must stay in sync or installs go stale.
+5. Open a PR describing what changed and why.
 
-4. Update `UPSTREAM_REFS.md` with any version notes or divergence rationale.
+### Confidentiality
 
-### Skill example sources
+**Never commit client-identifying information.** No customer names, environment URLs, tenant or
+environment IDs, publisher prefixes, user names, or business-revealing schema names. Playbook
+entries are generalized to the pattern, or they are not written here at all.
 
-When reviewing or improving skills, use the sources tracked in
-[`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) — in particular
-[`microsoft/copilot-studio-plugin`](https://github.com/microsoft/copilot-studio-plugin), the current
-source of truth for Copilot Studio agent authoring, and the Microsoft CAT agent skills gallery:
-
-- https://microsoft.github.io/cat-agent-skills/?tag=productivity
-
-Use these as inspiration sources only. Adapt patterns into Sopra-specific skills and docs instead of
-copying them verbatim.
-
-> **Note:** `microsoft/skills-for-copilot-studio` is **superseded** by `microsoft/copilot-studio-plugin`.
-> Do not use it as a source for new work.
-
-See [`shared/upstream-skill-examples.md`](shared/upstream-skill-examples.md) for the canonical list of external skill inspiration sources.
+Client artifacts belong in the client's `.sopra/workflow/` — never in this repository.
 
 ---
 
-## Related Resources
+## Staying current
 
-- [Microsoft Power Platform Documentation](https://learn.microsoft.com/en-us/power-platform/)
-- [Copilot Studio Documentation](https://learn.microsoft.com/en-us/microsoft-copilot-studio/)
-- [Power Automate Documentation](https://learn.microsoft.com/en-us/power-automate/)
-- [Dataverse Documentation](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/)
-- [`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) — upstream GitHub repos tracked by Sopra
-- [`CHANGELOG.md`](CHANGELOG.md) — version history of this repo
+This repo does not fork upstream repositories. Review the sources in
+[`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) quarterly and adapt insights into the relevant knowledge file,
+noting the source:
+
+```markdown
+<!-- Upstream: microsoft/copilot-studio-plugin v1.0.2 — adapted for Sopra publisher prefix -->
+```
+
+[`microsoft/copilot-studio-plugin`](https://github.com/microsoft/copilot-studio-plugin) is the
+current source of truth for Copilot Studio agent authoring.
+
+> **`microsoft/skills-for-copilot-studio` is superseded** by `copilot-studio-plugin`. If it is still
+> installed alongside the successor you will get duplicate, conflicting agents — uninstall it.
+
+---
+
+## Related
+
+- [Power Platform docs](https://learn.microsoft.com/en-us/power-platform/) ·
+  [Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/) ·
+  [Power Automate](https://learn.microsoft.com/en-us/power-automate/) ·
+  [Dataverse](https://learn.microsoft.com/en-us/power-apps/developer/data-platform/)
+- [About Copilot CLI plugins](https://docs.github.com/copilot/concepts/agents/copilot-cli/about-cli-plugins)
+- [`UPSTREAM_REFS.md`](UPSTREAM_REFS.md) · [`CHANGELOG.md`](CHANGELOG.md)

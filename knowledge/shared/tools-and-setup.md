@@ -104,7 +104,7 @@ Update:
 > **⚠️ Experimental.** Microsoft states this plugin is a research project, not an officially supported
 > product, and is not intended for production use. Sopra treats its output as a **draft accelerator**:
 > review and validate all generated YAML, and never push it straight to UAT or PROD. See
-> [`../UPSTREAM_REFS.md`](../UPSTREAM_REFS.md) entry 3.
+> [`../UPSTREAM_REFS.md`((../UPSTREAM_REFS.md) entry 3.
 
 Plugin state lives in `~/.copilot-studio-cli/` (paths, chat config, token cache) and survives plugin
 updates. Token caches use Windows DPAPI where the native dependencies are available; if they are not,
@@ -123,7 +123,7 @@ Chat-testing a CLI-authored agent needs a one-time public client app registratio
 5. Grant admin consent
 
 The Power Platform API service principal may need tenant-admin registration first. Plan for that
-dependency. Details: [`../copilot-studio/cli-authoring.md`](../copilot-studio/cli-authoring.md#8-testing-a-cli-agent).
+dependency. Details: [`../copilot-studio/cli-authoring.md`((../copilot-studio/cli-authoring.md#8-testing-a-cli-agent).
 
 ---
 
@@ -143,8 +143,8 @@ dependency. Details: [`../copilot-studio/cli-authoring.md`](../copilot-studio/cl
 - **Never commit secrets.** No client secrets, connection IDs, tenant IDs, or tokens in the repo.
 - Use environment variables or a secret store locally; GitHub Actions secrets in CI.
 - Connections must use **named service accounts**, never a developer's personal connection.
-- See [`environment-strategy.md`](environment-strategy.md) and
-  [`naming-conventions.md`](naming-conventions.md).
+- See [`environment-strategy.md`((environment-strategy.md) and
+  [`naming-conventions.md`((naming-conventions.md).
 
 ---
 

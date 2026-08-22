@@ -61,7 +61,7 @@ pac admin assign-group --environment "https://sopra-dev.crm4.dynamics.com" `
   --role "System Administrator"
 ```
 
-See [`shared/tools-and-setup.md`](../../shared/tools-and-setup.md) for full setup instructions.
+See [`shared/tools-and-setup.md`((../../shared/tools-and-setup.md) for full setup instructions.
 
 ---
 
@@ -70,4 +70,4 @@ See [`shared/tools-and-setup.md`](../../shared/tools-and-setup.md) for full setu
 <!-- Upstream: microsoft/powerplatform-actions — workflow structure and action names -->
 <!-- Sopra Divergence: Added connection reference swap step before import; upstream samples omit this -->
 
-These workflows use `microsoft/powerplatform-actions`. See [`UPSTREAM_REFS.md`](../../UPSTREAM_REFS.md) for version pinning policy.
+These workflows use `microsoft/powerplatform-actions`. See [`UPSTREAM_REFS.md`((../../UPSTREAM_REFS.md) for version pinning policy.

@@ -8,6 +8,67 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added — repackaged as an installable plugin (0.1.0)
+
+The repository is now a **plugin** installable in both GitHub Copilot CLI and Claude from a single
+commit, so it can be added on customer machines without file copying or elevated access.
+
+- **`.github/plugin/plugin.json`** — GitHub Copilot manifest (`skills: ["skills/"]`).
+- **`.claude-plugin/plugin.json`** + **`.claude-plugin/marketplace.json`** — Claude manifest and
+  self-hosted marketplace listing, so `/plugin marketplace add <org>/Sopra-Workflow` works directly
+  against this repo with no separate marketplace registry.
+- **`commands/`** — 13 explicit `/sw-*` slash commands, giving deterministic invocation instead of
+  relying on natural-language skill routing: `/sw-start`, `/sw-status`, `/sw-design`, `/sw-analyze`,
+  `/sw-present`, `/sw-grill`, `/sw-plan`, `/sw-review`, `/sw-implement`, `/sw-test`, `/sw-draw`,
+  `/sw-review-yaml`, `/sw-learn`.
+- **`skills/design-solution/SKILL.md`** — New. Fills the greenfield gap: requirements interview,
+  deliberate service selection (agent vs cloud flow vs agent flow vs Dataverse vs code), two-to-three
+  options with trade-offs, a recommendation with rejected alternatives recorded, and a specification
+  detailed enough for `create-plan` to consume.
+- **`skills/capture-learning/SKILL.md`** + **`playbooks/`** — New. The tribal-knowledge mechanism that
+  was previously absent entirely. Includes a mandatory client-confidentiality gate, a qualification
+  test, a structured entry format with `confidence` and `last-verified` fields, and a feedback step
+  that folds confirmed lessons back into `knowledge/` and the review skills.
+- **`knowledge/agent-flows/ARCHITECTURE.md`** — New. Agent Flows were absent from the knowledge base.
+  Covers agent-flow vs cloud-flow selection, the name/description/schema contract the agent routes
+  on, error and latency rules, identity and confirmation, ALM, two-level testing, and a review
+  checklist.
+
+### Changed — structure
+
+- **`.github/skills/*` and `.agents/skills/*` → `skills/`** — one skill location, matching the plugin
+  contract. The split between "agent skills" and "workflow skills" was an artifact of the old
+  copy-into-project install model and no longer meant anything.
+- **Domain docs → `knowledge/`** — `copilot-studio/`, `power-automate/`, `dataverse/`, `solutions/`
+  and `shared/` now live under `knowledge/`, so they ship inside the plugin and resolve from any
+  client workspace via `../../knowledge/`.
+- **`workflow-skills` → `sw-overview`**, rewritten from a 46-line stub into the router: the
+  toolkit-vs-project distinction, knowledge and artifact locations, the stage routing table,
+  resumability, architecture identification, and the working rules.
+- **Artifact path standardised to `.sopra/workflow/`** in the *client project*. This resolves the
+  conflict between the `.goals/workflow/` path the skills documented and the `workflow/` path the
+  extension actually wrote to — the two never agreed.
+- **`README.md`** — rewritten around install, commands, and the toolkit/project separation.
+- **`AGENTS.md`** — rewritten and re-scoped to working *on the toolkit*, with path rules, the
+  command-vs-skill split, manifest version-sync requirements, and how to test with `--plugin-dir`.
+- **`skills/README.md`** — rewritten as the skill/command inventory and authoring guide.
+
+### Fixed
+
+- **`.github/workflows/solution-export-import.yml` → `templates/github-workflows/`** — it triggered
+  on `push` to main and on `pull_request`, so as a `.github/workflows/` file it would have executed
+  against this repository, which contains no Power Platform solution. It is a client template.
+- **Removed `.github/extensions/workflow-skills/extension.mjs`** — a 73-line no-op that wrote the
+  prompt back to a file and returned it. It appeared functional and did nothing.
+- **Repaired 15 internal links** broken by the restructure, and re-verified all markdown links
+  resolve repo-wide.
+
+### Known issue (environment, not this repo)
+
+`microsoft/skills-for-copilot-studio` is superseded by `microsoft/copilot-studio-plugin`, but both
+may still be installed side by side — producing duplicate, overlapping Copilot Studio agents. Two of
+its skills also fail to load (`argument-hint must be a string`). Uninstall the superseded plugin.
+
 ### Added
 
 - **`copilot-studio/cli-authoring.md`** — New. CLI/YAML authoring with `pac copilot`: prerequisites and

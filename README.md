@@ -24,25 +24,23 @@ You keep working in the **client's** repository. The toolkit rides along; it is 
 
 ## Install
 
-> Replace `<org>` with the GitHub organisation hosting this repo.
-
 **GitHub Copilot CLI**
 
 ```
-/plugin marketplace add <org>/Sopra-Workflow
+/plugin marketplace add jesperramstroemSopra/SopraSteria-Workflow
 /plugin install sopra-workflow@sopra-workflow
 ```
 
 or directly:
 
 ```
-copilot plugin install <org>/Sopra-Workflow
+copilot plugin install jesperramstroemSopra/SopraSteria-Workflow
 ```
 
 **Claude**
 
 ```
-/plugin marketplace add <org>/Sopra-Workflow
+/plugin marketplace add jesperramstroemSopra/SopraSteria-Workflow
 /plugin install sopra-workflow
 ```
 

@@ -41,7 +41,7 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
   - `../../knowledge/dataverse/ARCHITECTURE.md` and `../../knowledge/dataverse/patterns/*.md`
   - `../../knowledge/solutions/ARCHITECTURE.md` and `../../knowledge/solutions/patterns/*.md`
   - `../../knowledge/power-apps/ARCHITECTURE.md` and `../../knowledge/power-apps/patterns/*.md`
-    (Canvas Apps: delegation warnings, Named Formulas, component libraries, screen design)
+    (Canvas Apps: delegation warnings, Named Formulas, component libraries, screen design, PCF decisioning)
   - `../../knowledge/custom-connectors/ARCHITECTURE.md` and `../../knowledge/custom-connectors/patterns/*.md`
     (auth patterns, pagination, policy templates)
   - `../../knowledge/governance/ARCHITECTURE.md` and `../../knowledge/governance/patterns/*.md`

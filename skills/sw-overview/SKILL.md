@@ -35,11 +35,11 @@ project is open.
   power-automate/     ARCHITECTURE.md, patterns/ (approval-flows, child-flows, dataverse-operations,
                       error-handling, flow-review-checklist, http-connector, monitoring, scheduled-flows)
   agent-flows/        ARCHITECTURE.md, patterns/ (input-output-contract, async-pattern, testing-agent-flows)
-  dataverse/          ARCHITECTURE.md, patterns/ (auditing, plugin-patterns, security-model,
+  dataverse/          ARCHITECTURE.md, patterns/ (auditing, plugin-patterns, query-shapes, security-model,
                       solution-layering, table-design, virtual-tables, web-api-queries)
-  solutions/          ARCHITECTURE.md, patterns/ (alm-pipeline, connection-references,
-                      environment-strategy, managed-vs-unmanaged, publisher-conventions)
-  power-apps/         ARCHITECTURE.md, patterns/ (component-library, delegation, performance, screen-design)
+  solutions/          ARCHITECTURE.md, patterns/ (alm-pipeline, connection-references, environment-strategy,
+                      managed-vs-unmanaged, publisher-conventions, release-readiness)
+  power-apps/         ARCHITECTURE.md, patterns/ (component-library, delegation, pcf-decision, performance, screen-design)
   custom-connectors/  ARCHITECTURE.md, patterns/ (auth-patterns, pagination, policy-templates)
   governance/         ARCHITECTURE.md, patterns/ (coe-kit-patterns, dlp-policies, environment-provisioning)
   shared/             naming-conventions.md, environment-strategy.md, tools-and-setup.md

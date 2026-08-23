@@ -115,7 +115,7 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
   - `powercat-canvas-apps` performance patterns → informed `knowledge/power-apps/patterns/performance.md` and `delegation.md`. The `powercat-canvas-apps` skill remains the automated audit tool for `pa.yaml` files.
   - `powercat-dataverse` Web API patterns → informed `knowledge/dataverse/patterns/web-api-queries.md`. The `dataverse-webapi-query` skill remains the query-generation tool.
   - `powercat-governance` dev env provisioning → referenced in `knowledge/governance/patterns/environment-provisioning.md`. The `create-pp-dev-env` skill is the recommended automation for individual developer environments.
-  - `powercat-procode-eval` eval patterns → referenced in `skills/test-solution/SKILL.md` as the specialized eval track for Code Apps and Generative Pages.
+  - `powercat-procode-eval` eval patterns → referenced in `skills/test-solution/SKILL.md` as the specialized eval track for code-heavy app validation.
 - **Divergences:**
   - Sopra wraps Power CAT patterns in our ALM lifecycle, service account requirements, and Sopra naming conventions. Power CAT patterns are absorbed into Sopra knowledge files (not linked externally) so they are available offline and under Sopra quality control.
   - Power CAT execution skills (overflow, canvas-apps, dataverse-webapi-query) are referenced as complementary tools for automated/deep work — they are not replaced by Sopra knowledge.

@@ -4,8 +4,9 @@
 > any client project, and drive the work with explicit commands — from first architecture sketch
 > through analysis, planning, implementation and test.
 
-Covers **Copilot Studio**, **Power Automate**, **Agent Flows**, **Dataverse** and **Solution ALM**,
-backed by Sopra Steria field knowledge that is not in the Microsoft documentation.
+Covers **Copilot Studio**, **Power Automate**, **Agent Flows**, **Dataverse**, **Power Apps**,
+**Custom Connectors**, **Governance** and **Solution ALM**, backed by Sopra Steria field knowledge
+that is not in the Microsoft documentation.
 
 ---
 
@@ -130,6 +131,9 @@ Artifacts are timestamped and never overwritten, so the history of decisions sur
 | Agent Flows | `knowledge/agent-flows/` |
 | Dataverse | `knowledge/dataverse/` |
 | Solutions / ALM | `knowledge/solutions/` |
+| Power Apps | `knowledge/power-apps/` |
+| Custom Connectors | `knowledge/custom-connectors/` |
+| Governance | `knowledge/governance/` |
 | Cross-cutting | `knowledge/shared/` — naming, environments, developer setup |
 
 Maturity varies. `knowledge/copilot-studio/` and `knowledge/shared/tools-and-setup.md` are

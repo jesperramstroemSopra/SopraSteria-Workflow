@@ -48,7 +48,9 @@ Load the relevant guides before forming an opinion. At minimum:
 - `../../knowledge/solutions/ARCHITECTURE.md` — every design lands in a solution eventually
 - Whichever domains are in play:
   - `../../knowledge/copilot-studio/patterns/agentic-loop.md` (modern agents — the default for new work)
-  - `../../knowledge/copilot-studio/ARCHITECTURE.md` (classic — only if there is a reason)
+  - `../../knowledge/copilot-studio/ARCHITECTURE.md` (classic — when a constraint forces it; also load
+    the full `patterns/` subfolder: topic-design, channel-aware-behavior, teams-production-hardening,
+    rai-error-handling, dynamic-topic-redirect, orchestrator-variables)
   - `../../knowledge/power-automate/ARCHITECTURE.md`
   - `../../knowledge/agent-flows/ARCHITECTURE.md`
   - `../../knowledge/dataverse/ARCHITECTURE.md`
@@ -60,18 +62,35 @@ The most consequential decision, and the one most often made by habit. Justify i
 
 | If the requirement is… | Lead with |
 |---|---|
-| Conversational, ambiguous phrasing, needs reasoning over documents | Copilot Studio agent (agentic loop) |
+| Conversational, ambiguous phrasing, needs reasoning over documents | Copilot Studio agent (agentic loop — Sopra default) |
+| Conversational, but environment/constraints force classic (see below) | Copilot Studio agent (classic — explicit justification required) |
 | A deterministic multi-step process triggered by an event | Power Automate cloud flow |
 | A deterministic process the **agent** invokes as a tool | Agent Flow |
 | Relational data, security roles, auditing, business rules | Dataverse |
 | Packaging, versioning and promotion of any of the above | Solution + ALM pipeline |
 | Heavy transformation, or logic that will outlive the platform | Code — plugin, Azure Function, or an API |
 
+**When classic is the right Copilot Studio choice** (justify explicitly in the design document):
+
+- The customer's environment does not yet support the agentic loop — verify with the customer's
+  Power Platform admin before assuming; check tenant feature flags.
+- The solution requires Power Fx, topic variables, or global variables that cannot be eliminated.
+- A hard integration requirement depends on a connector action that has no equivalent tool form.
+- The customer has explicitly rejected migration and needs the existing classic agent maintained.
+- A regulatory or compliance constraint prevents the architecture change.
+
+When classic is chosen: load `../../knowledge/copilot-studio/ARCHITECTURE.md` and the full
+`../../knowledge/copilot-studio/patterns/` folder — several patterns there (topic design,
+Teams hardening, RAI error handling, channel-aware behavior) apply specifically to classic.
+
 Warning signs you picked wrong:
+
 - An agent used purely to run a fixed sequence — that is a flow with extra latency and cost.
 - A flow doing free-text interpretation with a chain of conditions — that wants an agent.
 - Dataverse used as a log sink at high volume — check licensing and consider alternatives.
 - A tool built for something Knowledge already answers — see the decision tree in `agentic-loop.md`.
+- Classic chosen because "it's what the team knows" without checking whether the environment supports
+  agentic loop — this produces an agent that cannot migrate later without significant rework.
 
 ## Step 4 — Produce two or three options, not one
 

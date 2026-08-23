@@ -106,7 +106,47 @@ Getting this wrong produces confident nonsense.
 | `configuration.recognizer.kind: CLICopilotRecognizer` or `CLIAgentRecognizer` in `settings.mcs.yml` | Agentic loop (authoritative) |
 
 Classic uses topics, trigger phrases and Power Fx. Agentic loop has **none of those** — it uses
-Instructions, Knowledge, Tools and Skills. See `../../knowledge/copilot-studio/patterns/agentic-loop.md`.
+Instructions, Knowledge, Tools and Skills.
+
+### Copilot Studio — which track applies?
+
+**New agent (greenfield)?** Default to the agentic loop. Only use classic when a hard constraint
+forces it — see `../../knowledge/copilot-studio/ARCHITECTURE.md §1` and the list below.
+
+**Existing customer agent?** Identify the architecture first using the signals above. Then use the
+correct track. Do not mix guidance.
+
+**When classic is required for a customer solution:**
+
+- The customer's Copilot Studio environment does not yet support the agentic loop (check tenant
+  feature flags before assuming)
+- The solution uses Power Fx, topic variables, or global variables that cannot be eliminated
+- A hard integration requirement depends on classic actions (e.g., a specific connector action that
+  has no equivalent tool form)
+- The customer explicitly rejects migration and needs the current classic agent maintained and extended
+- A regulatory or compliance reason prevents the architecture change
+
+In these cases: treat classic as a **first-class track**, not a legacy curiosity. Load
+`../../knowledge/copilot-studio/ARCHITECTURE.md` and all files under
+`../../knowledge/copilot-studio/patterns/` — several patterns there apply specifically to classic
+(topic design, slot-filling, channel-aware behavior, Teams hardening, RAI error handling).
+
+**Classic tracks in the knowledge base:**
+
+| Pattern | When relevant |
+|---|---|
+| `ARCHITECTURE.md` | Topic structure, system topics, variable management, auth patterns |
+| `patterns/topic-design.md` | Trigger phrases, slot-filling, chaining, Adaptive Cards |
+| `patterns/generative-answers.md` | Generative answers + knowledge sources in classic |
+| `patterns/multi-agent.md` | Orchestrator/specialist pattern in classic |
+| `patterns/channel-aware-behavior.md` | Gating behavior per Teams / M365 Copilot / web chat surface |
+| `patterns/teams-production-hardening.md` | 8-pattern framework for Teams-deployed classic agents |
+| `patterns/rai-error-handling.md` | Azure OpenAI content-filter error handling in `OnError` |
+| `patterns/dynamic-topic-redirect.md` | Switch-based routing replacing nested condition chains |
+| `patterns/orchestrator-variables.md` | AI-filled variables at topic selection time |
+| `patterns/testing-strategy.md` | Test strategy for classic agents |
+
+See `../../knowledge/copilot-studio/patterns/agentic-loop.md` for the modern architecture.
 
 **Power Automate vs Agent Flows:** Agent Flows are Copilot Studio-hosted and invoked by an agent as
 a tool; classic cloud flows are trigger-driven. They have different limits and licensing. See

@@ -10,7 +10,7 @@
     {
       "name": "sopra-workflow",
       "description": "Stage-aware Power Platform delivery toolkit: design, analyze, plan, implement and test solutions across Copilot Studio, Power Automate, Agent Flows, Dataverse and Solution ALM — backed by Sopra Steria field knowledge.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./"
     }
   ]

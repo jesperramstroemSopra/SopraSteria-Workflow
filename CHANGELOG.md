@@ -6,6 +6,72 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.2.0
+
+### Classic harness as a first-class track
+
+Classic Copilot Studio (topic-based) agents are actively maintained on many customer engagements.
+This release elevates classic from a historical footnote to a parallel, fully documented track.
+
+#### Added — classic pattern knowledge
+
+Five new pattern files under `knowledge/copilot-studio/patterns/`, all adapted from
+`microsoft/skills-for-copilot-studio` patterns and translated into Sopra conventions:
+
+- **`patterns/teams-production-hardening.md`** — Eight-pattern coordinated framework for classic
+  agents deployed to Microsoft Teams or M365 Copilot: reinstall handling (`OnInstallationUpdate`),
+  inactivity reset (`OnInactivity`), session-expired Hero Card, cross-channel global context init,
+  Reset Conversation override, Start Over with Adaptive Card diagnostics panel, OnError with
+  telemetry logging, and agent-level suggested prompts. Includes full YAML examples and a
+  validation checklist.
+- **`patterns/rai-error-handling.md`** — Override `OnError` to classify Azure OpenAI RAI
+  content-filter events (`ContentFiltered`) by subcode (`OpenAISelfHarm`, `OpenAIHate`,
+  `OpenAISexual`, `OpenAIViolence`, `OpenAIJailBreak`, `OpenAIndirectAttack`) and return
+  category-specific messages with telemetry. Two approaches: direct subcode check (primary, zero
+  latency) and AI Builder classifier (secondary, context-aware).
+- **`patterns/channel-aware-behavior.md`** — Detect `System.Activity.ChannelId`, gate behavior
+  per surface, and avoid the compound-channel-ID pitfall (`msteams:copilot` ≠ `msteams`).
+  Includes all known channel IDs, the one-shot init topic pattern, and the authorization safety note.
+- **`patterns/dynamic-topic-redirect.md`** — Use `Switch()` Power Fx inside a `BeginDialog`
+  node to replace deeply nested `ConditionGroup` routing chains with a single compact node.
+- **`patterns/orchestrator-variables.md`** — Use `AutomaticTaskInput` to have the generative
+  orchestrator classify or extract structured data at topic-selection time — zero extra credits,
+  zero latency. Includes knowledge-routing example with `OnKnowledgeRequested`.
+
+#### Changed — skills updated for classic awareness
+
+- **`skills/sw-overview/SKILL.md`** — Section 5 now explicitly branches classic vs. agentic.
+  Adds a table of "when classic is required for a customer solution" with five criteria (environment
+  flag, Power Fx dependency, connector constraint, customer decision, compliance). Adds a full
+  classic pattern inventory table so the router can point to the right files without guessing.
+
+- **`skills/review-agent-yaml/SKILL.md`** — Completely restructured from an agentic-only skill
+  into a **dual-track review skill**. Step 1 identifies the architecture; Track A covers the
+  agentic-loop checks (unchanged); Track B adds 21 classic-specific checks across 🔴 Critical,
+  🟠 Warning, and 🟡 Suggestion severities — covering hardcoded values, missing system topic
+  customization, trigger phrase count, topic overlap, topic size, global variable pollution,
+  confirmation-before-write, Teams production hardening, RAI error handling, generative answers
+  on regulated content, and PPAPI evaluation. Output now includes architecture label and a
+  go/no-go for UAT promotion (classic) or push (agentic).
+
+- **`skills/design-solution/SKILL.md`** — Step 2 now explicitly loads classic patterns when
+  the classic track is in play. Step 3 service selection table adds "classic — explicit
+  justification required" as a distinct row with five listed justification criteria, and adds a
+  warning sign for classic chosen by habit without checking environment support.
+
+#### Changed — root docs
+
+- **`README.md`** — Copilot Studio architecture section now states classic is a first-class track
+  for active customer work, and links the full `patterns/` folder for classic guidance.
+
+### Version bump rationale
+
+Skills `review-agent-yaml` and `sw-overview` materially change routing and review behavior for
+existing classic-agent customer work. The knowledge base adds five substantive pattern files. Per
+`AGENTS.md`: bump when changes materially affect installed-copy behavior.
+
+---
+
 ## [Unreleased]
 
 ### Added — repackaged as an installable plugin (0.1.0)

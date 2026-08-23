@@ -125,7 +125,7 @@ Artifacts are timestamped and never overwritten, so the history of decisions sur
 
 | Area | Path |
 |---|---|
-| Copilot Studio | `knowledge/copilot-studio/` — classic **and** agentic loop, CLI authoring, migration |
+| Copilot Studio | `knowledge/copilot-studio/` — classic **and** agentic loop, CLI authoring, migration, production hardening |
 | Power Automate | `knowledge/power-automate/` |
 | Agent Flows | `knowledge/agent-flows/` |
 | Dataverse | `knowledge/dataverse/` |
@@ -157,6 +157,13 @@ Authoritative check: `configuration.recognizer.kind` in `settings.mcs.yml` —
 then [`knowledge/copilot-studio/cli-authoring.md`](knowledge/copilot-studio/cli-authoring.md). To
 modernise an existing agent, see
 [`knowledge/copilot-studio/patterns/migration-classic-to-agentic.md`](knowledge/copilot-studio/patterns/migration-classic-to-agentic.md).
+
+**Classic is a first-class track for active customer work** when the environment, constraints, or
+customer decision make the agentic loop unavailable or inappropriate. When classic is in play, load
+[`knowledge/copilot-studio/ARCHITECTURE.md`](knowledge/copilot-studio/ARCHITECTURE.md) and the
+full [`knowledge/copilot-studio/patterns/`](knowledge/copilot-studio/patterns/) folder, which
+covers topic design, slot-filling, Teams production hardening, RAI error handling, channel-aware
+behavior, dynamic routing, and orchestrator-generated variables.
 
 ---
 

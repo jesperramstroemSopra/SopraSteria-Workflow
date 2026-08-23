@@ -23,6 +23,9 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
    - Power Automate: flow definition JSON files, solution zips
    - Dataverse: table definitions, security role XML, plugin code
    - Solutions: solution.xml, customizations.xml, environment variable definitions
+   - Power Apps: `pa.yaml` files (Canvas Apps), `app.app` / `solution.xml` entries for MDAs
+   - Custom Connectors: `apiDefinition.swagger.json`, connector definition folders in solution zips
+   - Governance indicators: missing DLP documentation, personal connections, no service account
 
    Identify **which Copilot Studio architecture** you are looking at before evaluating: a `topics/`
    folder means classic; `behaviors/` and `capabilities/` mean agentic-loop. Confirm with
@@ -34,9 +37,16 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
    - Copilot Studio (modern): `../../knowledge/copilot-studio/patterns/agentic-loop.md`, `../../knowledge/copilot-studio/cli-authoring.md`
    - Copilot Studio (classic): `../../knowledge/copilot-studio/ARCHITECTURE.md` and `../../knowledge/copilot-studio/patterns/*.md`
    - `../../knowledge/power-automate/ARCHITECTURE.md` and `../../knowledge/power-automate/patterns/*.md`
-   - `../../knowledge/dataverse/ARCHITECTURE.md` and `../../knowledge/dataverse/patterns/*.md`
-   - `../../knowledge/solutions/ARCHITECTURE.md` and `../../knowledge/solutions/patterns/*.md`
-   - `../../knowledge/shared/naming-conventions.md`, `../../knowledge/shared/environment-strategy.md`
+    (includes `flow-review-checklist.md` — use for PA flow reviews; reference `powercat-overflow` skill for full solution audit)
+  - `../../knowledge/dataverse/ARCHITECTURE.md` and `../../knowledge/dataverse/patterns/*.md`
+  - `../../knowledge/solutions/ARCHITECTURE.md` and `../../knowledge/solutions/patterns/*.md`
+  - `../../knowledge/power-apps/ARCHITECTURE.md` and `../../knowledge/power-apps/patterns/*.md`
+    (Canvas Apps: delegation warnings, Named Formulas, component libraries, screen design)
+  - `../../knowledge/custom-connectors/ARCHITECTURE.md` and `../../knowledge/custom-connectors/patterns/*.md`
+    (auth patterns, pagination, policy templates)
+  - `../../knowledge/governance/ARCHITECTURE.md` and `../../knowledge/governance/patterns/*.md`
+    (DLP policies, environment provisioning, CoE Kit)
+  - `../../knowledge/shared/naming-conventions.md`, `../../knowledge/shared/environment-strategy.md`
 
 3. **Evaluate against the guides.** For each analysis type:
    - **Architecture**: Does the project follow Sopra's architecture patterns? Are there structural anti-patterns?

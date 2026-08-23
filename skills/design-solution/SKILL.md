@@ -54,6 +54,9 @@ Load the relevant guides before forming an opinion. At minimum:
   - `../../knowledge/power-automate/ARCHITECTURE.md`
   - `../../knowledge/agent-flows/ARCHITECTURE.md`
   - `../../knowledge/dataverse/ARCHITECTURE.md`
+  - `../../knowledge/power-apps/ARCHITECTURE.md` — when UI requirements are in scope
+  - `../../knowledge/custom-connectors/ARCHITECTURE.md` — when external API integration is in scope
+  - `../../knowledge/governance/ARCHITECTURE.md` — when environment setup, DLP, or CoE is in scope
 - `../../playbooks/` — field-learned constraints that are not in any Microsoft document
 
 ## Step 3 — Choose the service, deliberately
@@ -67,6 +70,10 @@ The most consequential decision, and the one most often made by habit. Justify i
 | A deterministic multi-step process triggered by an event | Power Automate cloud flow |
 | A deterministic process the **agent** invokes as a tool | Agent Flow |
 | Relational data, security roles, auditing, business rules | Dataverse |
+| Custom UI with full layout control, mobile-first, multi-connector | Canvas App |
+| Standard forms/views over Dataverse, role-based access, no custom UI | Model-Driven App (MDA) |
+| Calling an external API from multiple flows/apps, or complex auth | Custom Connector |
+| Environment health, DLP, maker governance, tenant inventory | Governance (DLP + CoE Kit) |
 | Packaging, versioning and promotion of any of the above | Solution + ALM pipeline |
 | Heavy transformation, or logic that will outlive the platform | Code — plugin, Azure Function, or an API |
 

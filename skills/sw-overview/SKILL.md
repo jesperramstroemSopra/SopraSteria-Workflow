@@ -31,11 +31,17 @@ project is open.
 
 ```text
 ../../knowledge/
-  copilot-studio/     ARCHITECTURE.md (classic), cli-authoring.md, patterns/
-  power-automate/     ARCHITECTURE.md, patterns/
-  agent-flows/        ARCHITECTURE.md, patterns/
-  dataverse/          ARCHITECTURE.md, patterns/
-  solutions/          ARCHITECTURE.md, patterns/
+  copilot-studio/     ARCHITECTURE.md (classic), cli-authoring.md, patterns/ (11 patterns)
+  power-automate/     ARCHITECTURE.md, patterns/ (approval-flows, child-flows, dataverse-operations,
+                      error-handling, flow-review-checklist, http-connector, monitoring, scheduled-flows)
+  agent-flows/        ARCHITECTURE.md, patterns/ (input-output-contract, async-pattern, testing-agent-flows)
+  dataverse/          ARCHITECTURE.md, patterns/ (auditing, plugin-patterns, security-model,
+                      solution-layering, table-design, virtual-tables, web-api-queries)
+  solutions/          ARCHITECTURE.md, patterns/ (alm-pipeline, connection-references,
+                      environment-strategy, managed-vs-unmanaged, publisher-conventions)
+  power-apps/         ARCHITECTURE.md, patterns/ (component-library, delegation, performance, screen-design)
+  custom-connectors/  ARCHITECTURE.md, patterns/ (auth-patterns, pagination, policy-templates)
+  governance/         ARCHITECTURE.md, patterns/ (coe-kit-patterns, dlp-policies, environment-provisioning)
   shared/             naming-conventions.md, environment-strategy.md, tools-and-setup.md
 ../../playbooks/      Field-learned solutions that are NOT in Microsoft docs
 ```
@@ -151,6 +157,18 @@ See `../../knowledge/copilot-studio/patterns/agentic-loop.md` for the modern arc
 **Power Automate vs Agent Flows:** Agent Flows are Copilot Studio-hosted and invoked by an agent as
 a tool; classic cloud flows are trigger-driven. They have different limits and licensing. See
 `../../knowledge/agent-flows/ARCHITECTURE.md`.
+
+**Power Apps (Canvas vs Model-Driven):** Canvas Apps require custom UI; Model-Driven Apps are
+metadata-driven and Dataverse-only. Default to MDA when the data source is Dataverse and the UI
+is standard forms/views. See `../../knowledge/power-apps/ARCHITECTURE.md`.
+
+**Custom Connectors:** Use when multiple flows/apps call the same external API, or when OAuth 2.0
+/ complex auth is required. Direct HTTP action is acceptable for single-use, simple calls. See
+`../../knowledge/custom-connectors/ARCHITECTURE.md`.
+
+**Governance:** Always establish environment ring, DLP, and service accounts at project start —
+not after go-live. Recommend CoE Kit for tenants with >20 active makers. See
+`../../knowledge/governance/ARCHITECTURE.md`.
 
 ## 6. Working rules
 

@@ -108,9 +108,20 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 ### 10. `microsoft/power-cat-skills`
 
 - **URL:** https://github.com/microsoft/power-cat-skills
-- **Description:** Microsoft Power CAT skills and examples for productivity-oriented agent workflows and reusable patterns.
-- **Sopra Usage:** Review this repo when improving workflow skills, prompt structure, review style, and productivity-oriented agent behavior.
-- **Divergences:** Sopra adapts examples into our own workflow stages, artifact model, and Power Platform conventions.
+- **Status:** **Active.** A plugin marketplace for GitHub Copilot CLI and Microsoft Scout, providing specialized execution skills for Power Platform domains.
+- **Description:** Nine plugins covering: Canvas App performance audit and migration (`powercat-canvas-apps`), Dataverse Web API query generation (`powercat-dataverse`), Power Automate flow review against Microsoft coding guidelines (`powercat-overflow`), Power Pages audit (`powercat-overpage`), developer environment provisioning (`powercat-governance`), pro-code app eval suite generation (`powercat-procode-eval`), customer story deck generation (`powercat-adoption`), and Power Platform admin digest (`powercat-admin-digest`).
+- **Sopra Usage:** This repo was substantially integrated into Sopra-Workflow in v0.3.0 (August 2026):
+  - `powercat-overflow` coding guidelines → adapted into `knowledge/power-automate/patterns/flow-review-checklist.md`. The `powercat-overflow` execution skill remains a complementary automated scanner for full-solution audits.
+  - `powercat-canvas-apps` performance patterns → informed `knowledge/power-apps/patterns/performance.md` and `delegation.md`. The `powercat-canvas-apps` skill remains the automated audit tool for `pa.yaml` files.
+  - `powercat-dataverse` Web API patterns → informed `knowledge/dataverse/patterns/web-api-queries.md`. The `dataverse-webapi-query` skill remains the query-generation tool.
+  - `powercat-governance` dev env provisioning → referenced in `knowledge/governance/patterns/environment-provisioning.md`. The `create-pp-dev-env` skill is the recommended automation for individual developer environments.
+  - `powercat-procode-eval` eval patterns → referenced in `skills/test-solution/SKILL.md` as the specialized eval track for Code Apps and Generative Pages.
+- **Divergences:**
+  - Sopra wraps Power CAT patterns in our ALM lifecycle, service account requirements, and Sopra naming conventions. Power CAT patterns are absorbed into Sopra knowledge files (not linked externally) so they are available offline and under Sopra quality control.
+  - Power CAT execution skills (overflow, canvas-apps, dataverse-webapi-query) are referenced as complementary tools for automated/deep work — they are not replaced by Sopra knowledge.
+  - Sopra's flow review checklist treats hardcoded credentials as High/blocking; Power CAT Overflow classifies them as High but does not enforce blocking.
+  - Canvas App delegation warnings are treated as correctness bugs (blocking) in Sopra; Power CAT classifies them as performance notes.
+  - `powercat-overpage` (Power Pages) is **not yet integrated** — Power Pages is out of scope for Sopra-Workflow v0.3.0.
 
 ---
 
@@ -180,14 +191,11 @@ Each quarter (January, April, July, October), a designated team member runs the 
 
 ### Last Review
 
-- **Date:** 2026-08-22
+- **Date:** 2026-08-23
 - **Reviewer:** Sopra Platform Team
 - **Notes:**
-  - Added `microsoft/copilot-studio-plugin` as the primary Copilot Studio reference. Reviewed at
-    plugin `mcs-assistant` **v1.0.2**; requires **`pac` > 2.9.3**.
-  - Marked `microsoft/skills-for-copilot-studio` as **superseded** by the above and removed the
-    duplicate entry that previously listed it twice (as items 3 and 11).
-  - Derived three new documents from the plugin: `copilot-studio/cli-authoring.md`,
-    `copilot-studio/patterns/agentic-loop.md`, and
-    `copilot-studio/patterns/migration-classic-to-agentic.md`.
-  - **Next review must re-verify the YAML schema** — Microsoft states it may change without notice.
+  - Major expansion of knowledge base: added `power-apps/`, `custom-connectors/`, and `governance/` knowledge domains with full ARCHITECTURE.md + patterns each.
+  - Deepened existing domains: Power Automate (4 new patterns), Dataverse (3 new patterns), Agent Flows (3 new patterns), Solutions (2 new patterns).
+  - Substantially integrated `microsoft/power-cat-skills` (entry 10) — see that entry for full detail on what was absorbed and what remains as a complementary execution skill.
+  - Version bumped to 0.3.0 across all three manifests.
+  - **Next review must verify**: Power CAT skill versions for powercat-overflow, powercat-canvas-apps, powercat-governance; any breaking changes to Overflow sources list; CoE Kit version used in governance patterns.

@@ -1,0 +1,181 @@
+# Power Apps Architecture Guide
+
+> **Scope.** This document covers Canvas Apps and Model-Driven Apps — the two primary Power Apps
+> app types used in Sopra customer solutions. Power Pages (portals) and Code Apps are separate
+> tracks (Power Pages is a distinct knowledge domain; Code Apps are covered in the pro-code track).
+
+---
+
+## 1. App Type Selection
+
+The single most important decision is which app type to build. Getting this wrong is expensive.
+
+### Decision Tree
+
+```
+Who is the primary user and what is the primary task?
+├─ Internal staff, task-oriented, data heavy, business process
+│   └─ Is the UI mostly forms, grids, views, and standard controls?
+│       ├─ Yes → Model-Driven App (MDA)
+│       └─ No → Canvas App (custom UI required)
+├─ Field workers, mobile-first, offline required → Canvas App
+├─ Customers / external users → Power Pages (separate track)
+└─ Developers building tools or DevOps utilities → Code App (separate track)
+```
+
+### Canvas vs Model-Driven: When to Use Each
+
+| Criterion | Canvas App | Model-Driven App |
+|---|---|---|
+| **UI control** | Full pixel-level control | Constrained to platform controls |
+| **Data source** | Many connectors + Dataverse | Dataverse only |
+| **Forms/views** | Custom-built | Auto-generated from metadata |
+| **Business logic** | Power Fx formulas in the app | Business rules, plugins, flows |
+| **Mobile offline** | Supported with delegation care | Supported |
+| **ALM / packaging** | Solution-packaged | Solution-packaged |
+| **Customization effort** | High — every screen is manual | Low — metadata-driven |
+| **Best for** | Custom workflows, field apps, data entry with complex UX | CRM-like apps, case management, standard CRUD on Dataverse |
+
+**Default to Model-Driven** when the primary data source is Dataverse and the UI requirements are standard forms and views. Reserve Canvas App for genuine custom UX requirements — the build and maintenance cost is significantly higher.
+
+---
+
+## 2. Canvas App Architecture Principles
+
+### 2.1 Screen Structure
+
+Organize screens by function, not by data table. A screen represents a user task, not a database view.
+
+- **Home / Navigation** — entry point; uses `Navigate()` to other screens
+- **List screens** — read-only galleries; paginate with `Filter()` + `SortByColumns()`
+- **Detail screens** — view/edit a single record; use `EditForm` / `DisplayForm`
+- **Action screens** — task-specific (e.g., submit a request, confirm a deletion)
+- **Admin screens** — configuration; restrict with role guards at screen load
+
+Limit total screens to what a user actually navigates. Screens are not hidden because of roles — they are conditionally shown or absent from the navigation structure. See [`patterns/screen-design.md`](patterns/screen-design.md).
+
+### 2.2 Data Loading Strategy
+
+Power Apps formulas execute on the client. Every data call crosses a network. This is the root cause of most performance issues.
+
+- **OnStart**: Reserved for app-level constants, User() record, and lookup tables that never change during a session. Minimize what lives here — it blocks the splash screen.
+- **OnVisible**: Load data for the current screen when the user arrives. Keeps other screens from loading data the user may never see.
+- **Named Formulas** (preferred): Declared in App.Formulas. Lazy, memoized, re-evaluated only when dependencies change. Replace most OnStart assignments.
+- **Never load all records and filter client-side.** Always delegate filter predicates to the data source. See [`patterns/delegation.md`](patterns/delegation.md).
+
+### 2.3 Variables
+
+| Variable type | Scope | Use for |
+|---|---|---|
+| `Set()` global | App-wide | Authenticated user, selected theme, app-wide state |
+| `UpdateContext()` local | Single screen | UI state: selected record, form mode, loading flag |
+| Collections | App-wide | In-memory tables for gallery binding, temporary edits |
+
+**Do not use global variables as a substitute for proper data binding.** A pattern that loads all records into a collection and filters the collection is almost always a delegation workaround done incorrectly.
+
+### 2.4 Component Libraries
+
+Reusable UI elements (headers, footers, cards, form sections) belong in a **Component Library** — a separate app that components are published from and imported into consuming apps.
+
+- One component library per project or per design system.
+- Components expose input/output properties; they do not access global app state.
+- The library is a separate solution item — it must be imported before the consuming app.
+- Version the library and document breaking changes. Apps that consume it must be republished when the library version changes.
+
+See [`patterns/component-library.md`](patterns/component-library.md).
+
+---
+
+## 3. Model-Driven App Architecture Principles
+
+### 3.1 Model-Driven Apps are Metadata, Not Code
+
+An MDA is a declaration of which Dataverse tables, forms, views, and dashboards to expose — and to whom. The application itself is generated by the platform from that metadata. This means:
+
+- Business logic belongs in **Business Rules**, **Plugins**, or **Power Automate flows** — not in JavaScript web resources unless unavoidable.
+- UI customization belongs in **form layouts**, **views**, and **charts** — not in custom HTML pages.
+- Security belongs in **security roles** — not in application-side conditionals.
+
+### 3.2 Sitemap Design
+
+- Organize the sitemap by **user role**, not by data model. A sales user should not see the same sitemap structure as an administrator.
+- Use **multiple apps** (one per major role group) rather than one monolithic app with conditional visibility. Smaller, focused apps are faster to load and easier to understand.
+- Use **dashboards** as home pages for role-specific overviews.
+
+### 3.3 Forms
+
+- Every table should have at minimum: a **Main** form (create/edit), a **Quick View** form (for relationship cards), and a **Card** form (for mobile).
+- Use **form sections** and **tabs** to organize fields by task, not alphabetically.
+- Use **Business Rules** for simple show/hide/require/default logic. Use plugins for logic that must run regardless of which surface triggers it.
+- Avoid JavaScript on forms except for UI-only behavior that cannot be expressed as a business rule. JavaScript on forms is hard to test and breaks on form changes.
+
+---
+
+## 4. Naming Conventions
+
+| Artifact | Convention | Example |
+|---|---|---|
+| Canvas App | `[ProjectPrefix] [Function] App` | `SPR Order Management App` |
+| Model-Driven App | `[ProjectPrefix] [Module] App` | `SPR Field Service App` |
+| Screen | `scr[Function]` | `scrOrderList`, `scrOrderDetail` |
+| Global variable | `gbl[Name]` | `gblCurrentUser`, `gblTheme` |
+| Context variable | `loc[Name]` | `locSelectedOrder`, `locIsLoading` |
+| Collection | `col[Name]` | `colOrderLines`, `colLookupStatus` |
+| Component | `cmp[Name]` | `cmpHeader`, `cmpStatusBadge` |
+| Component Library | `[ProjectPrefix] Component Library` | `SPR Component Library` |
+
+---
+
+## 5. ALM
+
+Power Apps travel in solutions. Follow the standard Sopra ALM track:
+
+- Every app in a **managed solution** in Test/UAT/Prod; unmanaged in Dev only.
+- Use **environment variables** for any URL, list name, or configuration that differs by environment.
+- Use **connection references** for all connectors — never hardcode a connection.
+- Canvas App saves are not deployments. The solution export captures the published version. **Publish before exporting.**
+- Component Library changes must be **published and the consuming app re-imported** before a solution export.
+
+See [`../solutions/ARCHITECTURE.md`](../solutions/ARCHITECTURE.md).
+
+---
+
+## 6. Security
+
+- Canvas Apps do not have row-level security — they rely on the connector's security model. If data security is required, the **data source** must enforce it (Dataverse security roles, SharePoint permissions).
+- Model-Driven Apps use Dataverse security roles exclusively. Never use app-side conditionals as a security boundary.
+- For both types: test that a user with minimal permissions cannot read or write data they should not access, regardless of what the UI shows or hides.
+
+---
+
+## 7. Review Checklist
+
+- [ ] App type (Canvas / MDA) is the right choice for the use case and data source
+- [ ] Canvas: delegation is handled — no client-side filtering of large datasets
+- [ ] Canvas: Named Formulas used instead of OnStart where possible
+- [ ] Canvas: screens organized by user task, not by table
+- [ ] Canvas: component library used for repeated UI elements
+- [ ] MDA: business logic in business rules / plugins, not JavaScript
+- [ ] MDA: sitemap designed by role, not by data model
+- [ ] Both: environment variables and connection references used — no hardcoded values
+- [ ] Both: published before solution export
+- [ ] Both: security tested from a low-privilege account
+
+---
+
+## Related
+
+- [`patterns/screen-design.md`](patterns/screen-design.md)
+- [`patterns/delegation.md`](patterns/delegation.md)
+- [`patterns/component-library.md`](patterns/component-library.md)
+- [`patterns/performance.md`](patterns/performance.md)
+- [`../dataverse/ARCHITECTURE.md`](../dataverse/ARCHITECTURE.md)
+- [`../solutions/ARCHITECTURE.md`](../solutions/ARCHITECTURE.md)
+- `pnp/powerapps-samples` — screen patterns and component examples
+- `microsoft/power-cat-skills` → `powercat-canvas-apps` — performance audit and migration tooling
+
+## Upstream Reference
+
+- **Source:** `pnp/powerapps-samples`, `microsoft/power-cat-skills` (powercat-canvas-apps)
+- **Accessed:** 2026-Q3
+- **Sopra Divergence:** Sopra adds explicit naming conventions, enforces Component Library as a mandatory separate solution item, and mandates Named Formulas over OnStart. Power CAT canvas patterns are adapted here; the powercat-canvas-apps execution skill remains a separate install for deep performance audits.

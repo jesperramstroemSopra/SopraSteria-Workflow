@@ -6,6 +6,74 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.3.0
+
+### Full Power Platform component coverage
+
+This release expands Sopra-Workflow from a Copilot Studio + Power Automate + Dataverse toolkit into
+a full Power Platform delivery plugin. Three new knowledge domains are added, existing domains are
+significantly deepened, Power CAT skills content is absorbed, and all delivery skills are updated
+to route the full component set.
+
+#### Added — new knowledge domains
+
+**`knowledge/power-apps/`**
+- `ARCHITECTURE.md` — Canvas vs Model-Driven decision, data loading strategy, component libraries, naming, ALM, security
+- `patterns/screen-design.md` — screen types (list/detail/edit/action/admin), navigation conventions, anti-patterns
+- `patterns/delegation.md` — delegation limits by data source, patterns for delegable filters, pagination, anti-patterns
+- `patterns/component-library.md` — component structure, input/output properties, versioning, ALM considerations
+- `patterns/performance.md` — Named Formulas, OnStart minimization, Concurrent(), gallery binding, Power CAT audit tool reference
+
+**`knowledge/custom-connectors/`**
+- `ARCHITECTURE.md` — when to build vs HTTP action, connector anatomy, auth options, pagination, ALM, certified vs organizational
+- `patterns/auth-patterns.md` — OAuth 2.0 authorization code and client credentials, API Key, app registration checklist, common failures
+- `patterns/pagination.md` — next-link (x-ms-pageable), offset, cursor, Link header patterns; Do Until safeguards
+- `patterns/policy-templates.md` — Set Header, Set Query Param, Retry Policy, Convert Array to Object; design guidance
+
+**`knowledge/governance/`**
+- `ARCHITECTURE.md` — governance layers (tenant/environment/solution/app), environment ring, Managed Environments, DLP, CoE Kit, service accounts, licensing checklist
+- `patterns/dlp-policies.md` — connector groups, tenant vs environment scope, HTTP connector treatment, classification process, verification checklist
+- `patterns/environment-provisioning.md` — environment types, Sopra naming convention, provisioning checklist, Power CAT dev env skill reference, lifecycle management
+- `patterns/coe-kit-patterns.md` — Core/Governance/Nurture/Audit Log/ALM Accelerator modules, deployment order, maintenance cadence, anti-patterns
+
+#### Added — deepened existing domains
+
+**Power Automate** (4 new patterns)
+- `patterns/approval-flows.md` — single/parallel/sequential/all-required patterns, Teams adaptive card approvals, timeout and escalation
+- `patterns/scheduled-flows.md` — UTC triggers, concurrency limits, Sliding Window, batching large datasets, performance and throttling
+- `patterns/monitoring.md` — owner failure notifications, error scope alerting, Teams channel routing, Power BI CoE dashboard, Power CAT Overflow reference
+- `patterns/flow-review-checklist.md` — manual pre-delivery checklist adapted from Power CAT Overflow sources; covers naming, error handling, security, environment variables, performance, reusability, ALM, monitoring
+
+**Dataverse** (3 new patterns)
+- `patterns/web-api-queries.md` — OData URL structure, $select/$filter/$expand/$orderby, FetchXML, aggregation, multi-surface targeting; Power CAT dataverse-webapi-query skill reference
+- `patterns/virtual-tables.md` — OData v4 provider, Virtual Connector Provider, custom provider, limitations, when to prefer data import instead
+- `patterns/auditing.md` — enabling at environment/table/column level, querying the audit log, retention and storage impact, security role requirements
+
+**Agent Flows** (3 new patterns — this domain previously had ARCHITECTURE.md only)
+- `patterns/input-output-contract.md` — flow naming rules, description template, parameter naming/description/type, structured output with success signal
+- `patterns/async-pattern.md` — agent flow + cloud flow split for long-running work, job record schema, responsibility boundaries, optional status-check flow
+- `patterns/testing-agent-flows.md` — Level 1 direct testing, Level 2 routing tests, near-miss testing, PPAPI evaluation CSV format
+
+**Solutions** (2 new patterns)
+- `patterns/connection-references.md` — creation, naming, post-import binding, service account requirements, deployment runbook template, failure modes
+- `patterns/publisher-conventions.md` — one publisher per customer, prefix rules, version strategy, solution segmentation (data/process/UI)
+
+#### Changed — skills updated for full component coverage
+
+- **`skills/sw-overview/SKILL.md`** — knowledge map expanded to include all new domains; Power Apps/Custom Connectors/Governance routing guidance added in §5 (technology identification section)
+- **`skills/design-solution/SKILL.md`** — Step 2 knowledge-base load now includes power-apps, custom-connectors, and governance guides; Step 3 service selection table adds Canvas App, MDA, Custom Connector, and Governance as explicit rows
+- **`skills/analyze-project/SKILL.md`** — discovery step now detects Power Apps (`pa.yaml`), custom connectors (`apiDefinition.swagger.json`), and governance gaps; knowledge guide references extended to all new domains
+
+#### Changed — upstream references
+
+- **`UPSTREAM_REFS.md`** — entry 10 (`microsoft/power-cat-skills`) substantially expanded with full account of what was absorbed (overflow, canvas-apps, dataverse, governance) and what remains as a complementary execution skill. Divergences documented per skill.
+
+#### Version Bump Rationale
+
+Skills `sw-overview`, `design-solution`, and `analyze-project` now materially change routing and evaluation behavior for existing customer work. Three new knowledge domains added. This qualifies as v0.3.0 (minor version: new features, no breaking changes to existing patterns).
+
+---
+
 ## [Unreleased] — 0.2.0
 
 ### Classic harness as a first-class track

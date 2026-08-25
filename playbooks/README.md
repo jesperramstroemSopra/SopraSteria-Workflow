@@ -45,7 +45,11 @@ Add every new entry here. An unindexed entry will not be found again.
 
 | Title | Domain | Confidence | Last verified | File |
 |---|---|---|---|---|
-| _No entries yet — this collection grows with every engagement._ | | | | |
+| Prompt refactor safety in Copilot Studio skills | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/prompt-refactor-safety.md`](copilot-studio/prompt-refactor-safety.md) |
+| Orchestrator-to-skill contract alignment | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/orchestrator-skill-contract-alignment.md`](copilot-studio/orchestrator-skill-contract-alignment.md) |
+| Baseline-first recovery pattern | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/baseline-first-recovery-pattern.md`](copilot-studio/baseline-first-recovery-pattern.md) |
+| Single-fix regression loop | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/single-fix-regression-loop.md`](copilot-studio/single-fix-regression-loop.md) |
+| Worked example saturation management | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/worked-example-saturation-management.md`](copilot-studio/worked-example-saturation-management.md) |
 
 ## Domains
 

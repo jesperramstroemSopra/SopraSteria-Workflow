@@ -30,6 +30,7 @@ Read before reviewing:
 - `../../knowledge/copilot-studio/patterns/agentic-loop.md` — component decision tree
 - `../../knowledge/copilot-studio/cli-authoring.md` — file layout, naming, connection references
 - `../../knowledge/shared/naming-conventions.md`
+- `../../playbooks/copilot-studio/` — prompt refactor safety, contract alignment, recovery, regression loops
 
 ### What to inspect
 

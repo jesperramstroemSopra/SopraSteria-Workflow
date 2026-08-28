@@ -50,6 +50,7 @@ Add every new entry here. An unindexed entry will not be found again.
 | Baseline-first recovery pattern | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/baseline-first-recovery-pattern.md`](copilot-studio/baseline-first-recovery-pattern.md) |
 | Single-fix regression loop | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/single-fix-regression-loop.md`](copilot-studio/single-fix-regression-loop.md) |
 | Worked example saturation management | copilot-studio | confirmed | 2026-08-25 | [`copilot-studio/worked-example-saturation-management.md`](copilot-studio/worked-example-saturation-management.md) |
+| Environment variable resolution in the new flow designer | power-automate | probable | 2026-08 | [`power-automate/environment-variable-resolution-new-designer.md`](power-automate/environment-variable-resolution-new-designer.md) |
 
 ## Domains
 

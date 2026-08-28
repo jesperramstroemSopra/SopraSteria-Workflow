@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased] — 0.3.0
 
+### Added — critical field learning (Power Automate)
+
+- **`playbooks/power-automate/environment-variable-resolution-new-designer.md`** — documents a
+  critical workaround for the new workflow designer when classic dynamic-content parity is missing
+  for environment variable references. Captures the Dataverse lookup pattern
+  (`environmentvariabledefinition` + related value with fallback to default) and fail-fast guidance
+  for required configuration.
+
+### Changed — operationalized in knowledge
+
+- **`knowledge/power-automate/patterns/dataverse-operations.md`** — now includes explicit guidance
+  and a step-by-step workaround for resolving environment variables via Dataverse when token parity
+  is unavailable, plus anti-pattern warning against hardcoded environment-specific values.
+
 ### Full Power Platform component coverage
 
 This release expands Sopra-Workflow from a Copilot Studio + Power Automate + Dataverse toolkit into

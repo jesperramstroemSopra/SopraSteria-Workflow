@@ -36,7 +36,10 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
   /plugin install mcs-assistant@copilot-studio-plugin
   ```
 - **Sopra Usage:** Primary reference for **CLI-based agent authoring** ([`copilot-studio/cli-authoring.md`](knowledge/copilot-studio/cli-authoring.md)), the **agentic-loop architecture** ([`copilot-studio/patterns/agentic-loop.md`](knowledge/copilot-studio/patterns/agentic-loop.md)), and **classic→agentic migration** ([`copilot-studio/patterns/migration-classic-to-agentic.md`](knowledge/copilot-studio/patterns/migration-classic-to-agentic.md)).
-- **Divergences:** Sopra layers its naming conventions, `spr_` solution prefix, and environment-ring promotion rules on top of the plugin's generated output. We also require human review of all generated YAML before push.
+- **Divergences:** Sopra layers its naming conventions, `spr_` solution prefix, environment-ring
+  promotion rules, provider preflight, evidence contract, and operation-specific confirmation gates
+  on top of the plugin's output. The Sopra custom-agent team follows the upstream plugin's thin
+  specialist-profile structure, but keeps stage procedure in Sopra skills.
 - **⚠️ Experimental — read before relying on it:** Microsoft explicitly states this is *"an experimental research project, not an officially supported Microsoft product,"* that *"the Copilot Studio YAML schema may change without notice,"* and that it is **"not meant for production use."** Sopra treats plugin output as a **draft accelerator only**: always review generated YAML, validate it, and test in DEV before promoting. Never push plugin-generated YAML directly to UAT or PROD.
 
 ---
@@ -109,7 +112,9 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 
 - **URL:** https://github.com/microsoft/power-cat-skills
 - **Status:** **Active.** A plugin marketplace for GitHub Copilot CLI and Microsoft Scout, providing specialized execution skills for Power Platform domains.
-- **Description:** Nine plugins covering: Canvas App performance audit and migration (`powercat-canvas-apps`), Dataverse Web API query generation (`powercat-dataverse`), Power Automate flow review against Microsoft coding guidelines (`powercat-overflow`), Power Pages audit (`powercat-overpage`), developer environment provisioning (`powercat-governance`), pro-code app eval suite generation (`powercat-procode-eval`), customer story deck generation (`powercat-adoption`), and Power Platform admin digest (`powercat-admin-digest`).
+- **Description:** A growing Power CAT marketplace covering Dataverse query generation, Power
+  Automate solution review, governance, architecture advice, Canvas App analysis/migration,
+  pro-code evaluation, adoption storytelling, and admin reporting.
 - **Sopra Usage:** This repo was substantially integrated into Sopra-Workflow in v0.3.0 (August 2026):
   - `powercat-overflow` coding guidelines → adapted into `knowledge/power-automate/patterns/flow-review-checklist.md`. The `powercat-overflow` execution skill remains a complementary automated scanner for full-solution audits.
   - `powercat-canvas-apps` performance patterns → informed `knowledge/power-apps/patterns/performance.md` and `delegation.md`. The `powercat-canvas-apps` skill remains the automated audit tool for `pa.yaml` files.
@@ -125,7 +130,39 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 
 ---
 
-### 11. `microsoft/cat-agent-skills` (gallery)
+### 11. `microsoft/power-platform-skills`
+
+- **URL:** https://github.com/microsoft/power-platform-skills
+- **Status:** **Active.** Official Microsoft plugin marketplace for Power Platform development in
+  GitHub Copilot CLI and related hosts.
+- **Description:** Includes the `power-automate` plugin, which bundles skills and the FlowAgent MCP
+  server for browsing, building, running, debugging, and managing cloud flows. The marketplace also
+  contains Power Apps and Power Pages providers.
+- **Sopra Usage:** Preferred live-execution provider for Power Automate. Sopra agents preflight the
+  installed plugin and its `flowagent-*` tools, invoke the matching skill, and wrap execution in
+  confirmation and evidence requirements.
+- **Divergences:** Sopra does not install or route Power Pages or mobile-app plugins. FlowAgent is an
+  execution provider, while Sopra-Workflow remains responsible for lifecycle, architecture, ALM,
+  field learning, and operator presentation.
+
+---
+
+### 12. `github/awesome-copilot`
+
+- **URL:** https://github.com/github/awesome-copilot
+- **Status:** **Active.**
+- **Description:** Community collection of GitHub Copilot custom agents, skills, instructions, and
+  prompts.
+- **Sopra Usage:** Structural inspiration for the role split and working style of the Sopra custom
+  agent team, especially `ai-team-producer`, `ai-team-dev`, `ai-team-qa`,
+  `agent-governance-reviewer`, and `adr-generator`.
+- **Divergences:** No agent is copied verbatim. Sopra profiles are Power Platform-specific, invoke
+  existing Sopra skills, use file-backed workflow state, delegate to Microsoft providers, and apply
+  explicit mutation gates.
+
+---
+
+### 13. `microsoft/cat-agent-skills` (gallery)
 
 - **URL:** https://microsoft.github.io/cat-agent-skills/?tag=productivity
 - **Description:** Microsoft CAT's public gallery of agent skill examples — useful for skill structure, phrasing, and instruction style.
@@ -187,15 +224,21 @@ Each quarter (January, April, July, October), a designated team member runs the 
 | `microsoft/copilot-studio-plugin` | Record plugin version (`mcs-assistant` vX.Y.Z) and minimum `pac` version here at each review; plugin is experimental and may change without notice |
 | `microsoft/skills-for-copilot-studio` | **Superseded** — no longer tracked; retained for history only |
 | `microsoft/power-cat-skills` | Reference only; review quarterly for workflow skill ideas |
+| `microsoft/power-platform-skills` | Reference provider; verify Power Automate/FlowAgent setup quarterly |
+| `github/awesome-copilot` | Inspiration only; never replace Sopra profiles without review |
 | All others | Reference only; no version pinning required |
 
 ### Last Review
 
-- **Date:** 2026-08-23
+- **Date:** 2026-09-02
 - **Reviewer:** Sopra Platform Team
 - **Notes:**
   - Major expansion of knowledge base: added `power-apps/`, `custom-connectors/`, and `governance/` knowledge domains with full ARCHITECTURE.md + patterns each.
   - Deepened existing domains: Power Automate (4 new patterns), Dataverse (3 new patterns), Agent Flows (3 new patterns), Solutions (2 new patterns).
   - Substantially integrated `microsoft/power-cat-skills` (entry 10) — see that entry for full detail on what was absorbed and what remains as a complementary execution skill.
-  - Version bumped to 0.3.0 across all three manifests.
-  - **Next review must verify**: Power CAT skill versions for powercat-overflow, powercat-canvas-apps, powercat-governance; any breaking changes to Overflow sources list; CoE Kit version used in governance patterns.
+  - Added the GitHub Copilot custom-agent operating model and Microsoft
+    `power-platform-skills`/FlowAgent execution-provider routing.
+  - Added `github/awesome-copilot` as custom-agent structure inspiration.
+  - **Next review must verify**: current `mcs-assistant` agent inventory; Power Automate FlowAgent
+    tool names and auth requirements; Power CAT plugin versions; GitHub cloud-agent MCP OAuth
+    limitations.

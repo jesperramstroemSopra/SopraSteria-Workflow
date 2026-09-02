@@ -6,7 +6,77 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased] — 0.3.0
+## [Unreleased] — 0.4.1
+
+### Custom agent team and execution-provider orchestration
+
+This release adds a GitHub Copilot custom-agent layer around the existing stage skills. Skills remain
+the procedural source of truth; the agents add role boundaries, specialist delegation, protected
+operation gates, durable provider state, and a consistent operator handoff.
+
+#### Added — plugin-bundled custom agents
+
+- **`agents/sopra-delivery-lead.md`** — operator-facing coordinator that starts/resumes workflow,
+  runs provider preflight, delegates stages, maintains state, and presents outcomes.
+- **`agents/sopra-solution-architect.md`** — read-only design, analysis, review, planning, and
+  architecture specialist.
+- **`agents/sopra-solution-builder.md`** — manual-selection implementation specialist that executes
+  approved plans through Microsoft agents, FlowAgent, Power CAT, MCP, or CLI providers and stops at
+  each protected operation boundary.
+- **`agents/sopra-solution-verifier.md`** — independent test/evaluation agent with provider evidence
+  and release verdicts.
+- **`agents/sopra-method-improver.md`** — manual-selection learning agent that keeps client
+  candidates separate from promoted toolkit knowledge.
+
+#### Added — shared operating guidance
+
+- **`knowledge/shared/copilot-agent-operating-model.md`** — component responsibilities, agent team,
+  command compatibility matrix, mismatch feedback, lifecycle, confirmation gates, truthful execution
+  states, durable state schema, confidentiality, and local/cloud behavior.
+- **`knowledge/shared/execution-provider-routing.md`** — capability preflight and provider matrix for
+  Microsoft Copilot Studio agents, Power Automate/FlowAgent, Power CAT, Dataverse MCP, and optional
+  FlowStudio.
+- **`knowledge/shared/operator-output-contract.md`** — two-layer output: concise chat dashboard plus
+  detailed evidence artifact.
+- **`templates/copilot/`** — local GitHub Copilot setup checklist and secret-free optional MCP
+  configuration template.
+
+#### Changed — workflow behavior
+
+- Stage skills now identify their owning Sopra agent, preflight live capabilities, record the
+  execution provider/evidence level, and use the shared operator output contract.
+- Every `/sw-*` command now applies the shared compatibility gate before stage work. Safe mismatches
+  are limited to routing-only behavior, role conflicts are blocked, and the operator receives the
+  recommended agent plus exact selection command.
+- `implement-plan` requires separate confirmation for local implementation edits and every live
+  write, pull, push, publish, import, deployment, permission/connection, or destructive boundary.
+- `test-solution` delegates to specialist providers and distinguishes test design from executed
+  evidence.
+- `capture-learning` now writes candidates into the client project and only promotes scrubbed
+  lessons while operating in the toolkit repository.
+- Workflow state now records active agent, provider capability, pending confirmations, blockers,
+  latest artifact, and next action.
+- Root documentation now explains how commands, skills, agents, Microsoft plugins, MCP providers,
+  knowledge, and playbooks work together.
+
+#### Integration notes
+
+- The custom-agent profile structure is inspired by Microsoft's plugin-bundled Copilot Studio
+  specialist agents and GitHub's `awesome-copilot` team patterns, but no upstream profile is copied
+  verbatim.
+- `power-automate@power-platform-skills` is the preferred Power Automate execution provider and
+  supplies FlowAgent MCP.
+- Power Pages and mobile-app specialists remain out of scope.
+
+#### Version bump rationale
+
+The plugin now exposes five new custom agents and materially changes routing, implementation safety,
+state, and operator output. The compatibility gate is a follow-up change over the initial `0.4.0`
+draft, so the unreleased package is `0.4.1`.
+
+---
+
+## [0.3.0] — 2026-08-28
 
 ### Added — critical field learning (Power Automate)
 

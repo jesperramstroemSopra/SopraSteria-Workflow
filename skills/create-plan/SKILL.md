@@ -32,6 +32,9 @@ You are the planning stage of the Sopra workflow pipeline. Your job is to conver
    - **Dependencies**: which tasks must complete first
    - **Affected files**: specific files or components
    - **Sopra guide reference**: which architecture doc section applies
+   - **Execution provider**: agent, skill, MCP server, PAC, or local tool
+   - **Evidence required**: what proves the task is complete
+   - **Confirmation boundary**: local write, live write, push, publish, deployment, or none
 
 3. **Order the work.** Sequence tasks respecting dependencies:
    - Critical/blocker items first
@@ -65,6 +68,8 @@ Format:
 ## Decision Points (needs user input)
 ## Total Estimated Effort
 ## Risks and Mitigations
+## Execution Providers and Capability Gaps
+## Confirmation Gates
 ```
 
 ## Rules
@@ -74,6 +79,8 @@ Format:
 - Include "decision points" where the user needs to make a choice.
 - Reference Sopra guide sections so the implementer knows the standard to follow.
 - Do not start implementing — only plan. Implementation happens in `implement-plan`.
+- Apply `../../knowledge/shared/execution-provider-routing.md`; do not assume providers are installed.
+- Return the operator dashboard defined in `../../knowledge/shared/operator-output-contract.md`.
 
 ## Reference examples
 

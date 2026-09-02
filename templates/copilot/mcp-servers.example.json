@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "<approved-server-name>": {
+      "type": "http",
+      "url": "${COPILOT_MCP_SERVER_URL}",
+      "headers": {
+        "Authorization": "Bearer ${COPILOT_MCP_SERVER_TOKEN}"
+      },
+      "tools": [
+        "<read-only-tool-name>"
+      ]
+    }
+  }
+}

@@ -11,6 +11,11 @@ You review a Copilot Studio agent against Sopra conventions. You are read-only: 
 do not fix. **This skill handles both agentic-loop and classic agents** — identify which one you
 have first, then follow the corresponding track.
 
+This stage is owned by **Sopra Solution Architect**. For an existing modern agent, use current
+`mcs-assistant` Copilot Studio Describer output as inventory evidence, then apply this skill's Sopra
+dual-architecture checks. The current baseline has no dedicated Advisor. Do not route to the
+superseded plugin's Advisor profile.
+
 ## Step 1 — Identify the architecture
 
 Check `settings.mcs.yml` → `configuration.recognizer.kind`:
@@ -168,6 +173,7 @@ Save to `.sopra/workflow/review-agent-yaml/review-{timestamp}.md` containing:
 - Findings table: severity, file/topic, finding, recommended fix
 - Detailed findings with exact file paths and YAML/topic excerpts
 - A go / no-go verdict for push (agentic) or for UAT promotion (classic)
+- Describer/provider evidence and capability state
 
 ## Rules
 
@@ -176,6 +182,7 @@ Save to `.sopra/workflow/review-agent-yaml/review-{timestamp}.md` containing:
 - Never suggest edits under `.mcs/`.
 - Cite the Sopra guide section behind each finding.
 - Use Track A checks for agentic-loop agents. Use Track B checks for classic agents. Never mix.
+- Follow `../../knowledge/shared/operator-output-contract.md`.
 
 ## Upstream Reference
 

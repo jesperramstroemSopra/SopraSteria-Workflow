@@ -24,8 +24,24 @@ You are the implementation stage of the Sopra workflow pipeline. Your job is to 
    - Read the architecture docs referenced in the plan tasks.
    - Follow naming conventions from `../../knowledge/shared/naming-conventions.md`.
    - Follow environment patterns from `../../knowledge/shared/environment-strategy.md`.
+   - Follow `../../knowledge/shared/execution-provider-routing.md` and
+     `../../knowledge/shared/operator-output-contract.md`.
 
-3. **Execute tasks in order:**
+3. **Run capability preflight.**
+   - This stage is owned by **Sopra Solution Builder**.
+   - Identify the required Microsoft specialist, Power Automate/FlowAgent skill, Power CAT skill,
+    MCP server, PAC command, or local tool for each task.
+   - Verify availability and authentication before promising live execution.
+   - If a required provider is unavailable, mark the task blocked; do not substitute advisory output
+    and call it implemented.
+
+4. **Obtain scoped confirmation.**
+   - Confirm before the first batch of local implementation-file edits.
+   - Confirm separately before live writes, pulls that merge files, pushes, publishes, imports,
+    deployments, permission/connection changes, and destructive actions.
+   - State operation, target, impact, and rollback. One approval does not cover the next boundary.
+
+5. **Execute tasks in order:**
    - Work through phases sequentially (Phase 1 → 2 → 3 → 4).
    - Within a phase, respect task dependencies.
    - For each task:
@@ -35,14 +51,14 @@ You are the implementation stage of the Sopra workflow pipeline. Your job is to 
      d. Mark it as `done` in the progress file.
      e. Save progress to disk immediately.
 
-4. **Track progress persistently.** After each task, update the progress artifact so work can resume if interrupted.
+6. **Track progress persistently.** After each task, update the progress artifact so work can resume if interrupted.
 
-5. **Handle decision points.** When reaching a task that requires user input:
+7. **Handle decision points.** When reaching a task that requires user input:
    - Stop and ask the user.
    - Record the decision in the progress file.
    - Continue after receiving the answer.
 
-6. **Handle failures.** If a task fails:
+8. **Handle failures.** If a task fails:
    - Mark it as `blocked` with the error details.
    - Continue with independent tasks if possible.
    - Report blocked tasks at the end.
@@ -71,6 +87,8 @@ Format:
 | File | Change Type | Task ID |
 
 ## Blocked Items
+## Execution Providers and Evidence
+## Confirmations
 ## Summary
 ```
 
@@ -81,6 +99,11 @@ Format:
 - Do not skip tasks or change the order unless a dependency requires it.
 - If you hit something the plan didn't anticipate, note it in the progress file and ask the user.
 - Keep the progress file as the single source of truth for what's been done.
+- For Copilot Studio, use current `mcs-assistant` Architect for modern authoring/migration,
+  Describer for inventory, Init/Manage for workspace lifecycle, and Manage for pull/push/publish.
+  Current `mcs-assistant` has no Test/Advisor profile; use only separately verified supported
+  providers and never route silently to the superseded plugin.
+- Return the operator dashboard defined in `operator-output-contract.md`.
 
 ## Reference examples
 

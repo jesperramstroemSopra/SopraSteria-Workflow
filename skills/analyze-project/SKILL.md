@@ -47,6 +47,8 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
   - `../../knowledge/governance/ARCHITECTURE.md` and `../../knowledge/governance/patterns/*.md`
     (DLP policies, environment provisioning, CoE Kit)
   - `../../knowledge/shared/naming-conventions.md`, `../../knowledge/shared/environment-strategy.md`
+  - `../../knowledge/shared/execution-provider-routing.md`,
+    `../../knowledge/shared/operator-output-contract.md`
 
 3. **Evaluate against the guides.** For each analysis type:
    - **Architecture**: Does the project follow Sopra's architecture patterns? Are there structural anti-patterns?
@@ -62,6 +64,15 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
    - 🟡 **Suggestion** — improvement opportunity
    - 🟢 **Good** — things done well (include these for balance)
 
+5. **Record execution evidence.**
+   - This stage is owned by **Sopra Solution Architect** and is read-only.
+   - Run capability preflight before using live metadata or query tools.
+   - For an existing modern Copilot Studio agent, use current `mcs-assistant` Describer output as
+     inventory evidence. The current baseline has no dedicated Advisor/troubleshooting agent.
+   - For full Power Automate solution review, prefer Power CAT Overflow when installed.
+   - Record the provider, scope, capability state, and whether findings are static or live-verified.
+   - Missing provider access is a limitation; do not imply live verification.
+
 ## Output artifact
 
 Save the analysis to: `.sopra/workflow/analyze-project/analysis-{timestamp}.md`
@@ -72,6 +83,7 @@ The artifact must include:
 - Summary of findings (table format)
 - Detailed findings with severity, description, affected files, and recommended fix
 - References to which Sopra guide sections apply
+- Provider/capability inventory and evidence level
 
 ## Rules
 
@@ -79,6 +91,7 @@ The artifact must include:
 - Be specific: reference exact file paths and line numbers when possible.
 - If the project has no artifacts to analyze, tell the user and stop.
 - Do not fix anything — only analyze and report. Fixes come in the `implement-plan` stage.
+- Return the operator dashboard defined in `../../knowledge/shared/operator-output-contract.md`.
 
 ## Reference examples
 

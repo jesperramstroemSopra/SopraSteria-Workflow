@@ -43,6 +43,8 @@ project is open.
   custom-connectors/  ARCHITECTURE.md, patterns/ (auth-patterns, pagination, policy-templates)
   governance/         ARCHITECTURE.md, patterns/ (coe-kit-patterns, dlp-policies, environment-provisioning)
   shared/             naming-conventions.md, environment-strategy.md, tools-and-setup.md
+                      copilot-agent-operating-model.md, execution-provider-routing.md,
+                      operator-output-contract.md
 ../../playbooks/      Field-learned solutions that are NOT in Microsoft docs
 ```
 
@@ -65,6 +67,7 @@ Every stage writes to the **client project** under `.sopra/workflow/`:
     review-plan/
     implement-plan/
     test-solution/
+    capture-learning/
 ```
 
 Files are named `<name>-<YYYY-MM-DD-HHmm>.md`. Never overwrite a previous artifact — append a new
@@ -77,22 +80,27 @@ Committing it is usually better: it makes the work resumable by anyone on the te
 
 Ask the user where they are if it is not obvious from the workspace. Then route:
 
-| Situation | Skill |
-|---|---|
-| Nothing built yet — greenfield, need architecture and ideas | `design-solution` |
-| Something exists — need to understand and evaluate it | `analyze-project` |
-| Have findings — need them readable for stakeholders | `present-analysis` |
-| Have a design or plan — want it stress-tested | `grill-me` |
-| Know what's wrong — need a work breakdown | `create-plan` |
-| Have a plan — want it gate-checked before building | `review-plan` |
-| Plan approved — build it | `implement-plan` |
-| Built — verify it | `test-solution` |
-| Need a visual of any scope | `draw-architecture` |
-| Reviewing Copilot Studio agent YAML specifically | `review-agent-yaml` |
-| Learned something the docs don't tell you | `capture-learning` |
+| Situation | Skill | Owning agent |
+|---|---|---|
+| Nothing built yet — greenfield, need architecture and ideas | `design-solution` | Sopra Solution Architect |
+| Something exists — need to understand and evaluate it | `analyze-project` | Sopra Solution Architect |
+| Have findings — need them readable for stakeholders | `present-analysis` | Sopra Delivery Lead |
+| Have a design or plan — want it stress-tested | `grill-me` | Sopra Solution Architect |
+| Know what's wrong — need a work breakdown | `create-plan` | Sopra Solution Architect |
+| Have a plan — want it gate-checked before building | `review-plan` | Sopra Solution Architect |
+| Plan approved — build it | `implement-plan` | Sopra Solution Builder |
+| Built — verify it | `test-solution` | Sopra Solution Verifier |
+| Need a visual of any scope | `draw-architecture` | Sopra Solution Architect |
+| Reviewing Copilot Studio agent YAML specifically | `review-agent-yaml` | Sopra Solution Architect; current Describer supplies inventory |
+| Learned something the docs don't tell you | `capture-learning` | Sopra Method Improver |
 
 Stages are **not** a mandatory pipeline. Start anywhere. A mature project may only ever need
 `analyze-project` → `grill-me` → `implement-plan`.
+
+When a Sopra custom agent is active, apply the agent-command compatibility gate in
+`../../knowledge/shared/copilot-agent-operating-model.md` before running a stage. A command does not
+switch the active agent. Warn on routing-only combinations and block role conflicts rather than
+silently running specialist work under the wrong profile.
 
 ### Resuming
 
@@ -158,6 +166,10 @@ See `../../knowledge/copilot-studio/patterns/agentic-loop.md` for the modern arc
 a tool; classic cloud flows are trigger-driven. They have different limits and licensing. See
 `../../knowledge/agent-flows/ARCHITECTURE.md`.
 
+For live Power Automate work, prefer Microsoft's `power-automate@power-platform-skills` plugin. It
+uses the FlowAgent MCP server. If the skills are visible but `flowagent-*` tools are not, run that
+plugin's `setup` skill.
+
 **Power Apps (Canvas vs Model-Driven):** Canvas Apps require custom UI; Model-Driven Apps are
 metadata-driven and Dataverse-only. Default to MDA when the data source is Dataverse and the UI
 is standard forms/views. See `../../knowledge/power-apps/ARCHITECTURE.md`.
@@ -170,7 +182,25 @@ is standard forms/views. See `../../knowledge/power-apps/ARCHITECTURE.md`.
 not after go-live. Recommend CoE Kit for tenants with >20 active makers. See
 `../../knowledge/governance/ARCHITECTURE.md`.
 
-## 6. Working rules
+## 6. Agent-led execution
+
+When custom agents are available, start broad requests with **Sopra Delivery Lead**. It delegates to
+the architect, builder, verifier, or method improver while the stage skills remain the source of
+procedure.
+
+Before promising live execution, follow
+`../../knowledge/shared/execution-provider-routing.md`. Record the selected provider and whether it
+is ready, needs setup, or is unavailable. Missing execution capability must produce `Blocked`, not
+an advisory answer labeled complete.
+
+Require explicit confirmation before local implementation-file edits and before every live write,
+pull that merges files, push, publish, deployment, import, permission/connection change, or
+destructive action.
+
+Every stage follows `../../knowledge/shared/operator-output-contract.md`: a concise operator
+dashboard in chat plus a detailed evidence artifact on disk.
+
+## 7. Working rules
 
 1. **Ask before assuming.** Every stage skill must ask clarifying questions when scope, project
    type, or intent is ambiguous. Do not guess at the shape of a client's environment.
@@ -184,3 +214,5 @@ not after go-live. Recommend CoE Kit for tenants with >20 active makers. See
    `.mcs/` metadata; never run `pac copilot pack`.
 7. **When you learn something the docs don't cover, run `capture-learning`.** That is how this
    toolkit gets better. It is the whole point.
+8. **Use external providers deliberately.** Microsoft plugins and MCP servers are execution
+   providers, not assumed dependencies. Preflight, delegate, and record evidence.

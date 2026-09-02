@@ -108,7 +108,7 @@ The CoE Starter Kit includes a **Power BI report** that shows:
 This is the right tool when you need tenant-wide visibility, not per-flow alerting. It
 complements per-flow error handling — it does not replace it.
 
-See [`../governance/patterns/coe-kit-patterns.md`](../governance/patterns/coe-kit-patterns.md).
+See [`../../governance/patterns/coe-kit-patterns.md`](../../governance/patterns/coe-kit-patterns.md).
 
 ---
 

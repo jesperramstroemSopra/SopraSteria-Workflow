@@ -65,9 +65,21 @@ Do not write from a single sentence. Ask:
 If confidence is low, still capture it — but mark it as **unconfirmed**. A suspected pattern with
 one sighting is useful; pretending it is established fact is not.
 
-## Step 4 — Write the entry
+## Step 4 — Choose the destination and confirm
 
-Save to `../../playbooks/<domain>/<short-kebab-title>.md` using this structure:
+First identify the workspace:
+
+- **Client project**: save a scrubbed candidate under
+  `.sopra/workflow/capture-learning/candidate-<YYYY-MM-DD-HHmm>.md`.
+- **Sopra-Workflow toolkit repository**: a reviewed, generalized lesson may be written to
+  `../../playbooks/<domain>/<short-kebab-title>.md`.
+
+Never try to write into an installed plugin from a client workspace. Obtain explicit confirmation
+before creating a candidate or changing toolkit files.
+
+## Step 5 — Write the entry
+
+Use this structure:
 
 ```markdown
 ---
@@ -103,12 +115,15 @@ What to look for in a review so it is caught early next time.
 Links to knowledge-base sections or other playbook entries.
 ```
 
-## Step 5 — Index it
+For a client-side candidate, add a `## Promotion notes` section stating which standing knowledge,
+review, planning, or test guidance should change if the lesson is promoted.
 
-Add a row to `../../playbooks/README.md` so the entry is discoverable by title, domain and tags.
-An unindexed entry will never be found again.
+## Step 6 — Index it
 
-## Step 6 — Feed it back
+Only in the toolkit repository, add a row to `../../playbooks/README.md` so the promoted entry is
+discoverable by title, domain and tags. An unindexed toolkit entry will never be found again.
+
+## Step 7 — Feed it back
 
 Ask whether this lesson should also change the standing guidance:
 
@@ -119,6 +134,9 @@ Ask whether this lesson should also change the standing guidance:
 
 A playbook entry that never influences a future review has not really been captured.
 
+Follow `../../knowledge/shared/operator-output-contract.md`. State whether the result is a
+client-side candidate or a promoted toolkit lesson.
+
 ## Rules
 
 - Confidentiality gate first. Always. No exceptions for "internal only".
@@ -126,3 +144,4 @@ A playbook entry that never influences a future review has not really been captu
 - Date every entry. Platform behaviour changes, and a stale workaround can be worse than none.
 - One lesson per file. Bundled entries do not get found by search.
 - Write it so a colleague with no context on the engagement can act on it.
+- Never write into an installed plugin from a client workspace.

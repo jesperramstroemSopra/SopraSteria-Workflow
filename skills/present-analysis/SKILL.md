@@ -33,6 +33,10 @@ You are the second stage of the Sopra workflow pipeline. Your job is to take a r
 
 4. **Save the presentation** to: `.sopra/workflow/present-analysis/presentation-{timestamp}.md`
 
+5. **Produce the operator handoff.** Follow
+   `../../knowledge/shared/operator-output-contract.md`. Name the source artifact, audience,
+   presentation artifact, evidence limitations, and one next action.
+
 ## Output format
 
 ```markdown
@@ -53,6 +57,7 @@ You are the second stage of the Sopra workflow pipeline. Your job is to take a r
 - If findings reference Sopra guide sections, keep those references.
 - The output should be suitable for sharing with a team lead or architect.
 - Keep language clear and actionable — no jargon without explanation.
+- Never turn static or advisory findings into claims of executed or live-verified work.
 
 ## Reference examples
 

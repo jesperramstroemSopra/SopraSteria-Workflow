@@ -16,6 +16,8 @@ A **plugin**. It installs into GitHub Copilot CLI and Claude from the same repos
 
 - **13 slash commands** (`/sw-*`) — explicit, discoverable entry points
 - **12 skills** — the logic behind the commands, which also trigger from natural language
+- **5 custom agents** — coordination, architecture, controlled implementation, verification, and
+  method improvement
 - **A knowledge base** (`knowledge/`) — the Sopra standard for each service
 - **Playbooks** (`playbooks/`) — what we learned the hard way, generalized and reusable
 
@@ -30,6 +32,12 @@ You keep working in the **client's** repository. The toolkit rides along; it is 
 ```
 /plugin marketplace add jesperramstroemSopra/SopraSteria-Workflow
 /plugin install sopra-workflow@sopra-workflow
+```
+
+For an existing installation:
+
+```text
+/plugin update sopra-workflow@sopra-workflow
 ```
 
 or directly:
@@ -62,6 +70,40 @@ copilot plugin update sopra-workflow
 
 ---
 
+## Custom agent team
+
+After installation, start a new Copilot session and select one of these custom agents:
+
+| Agent | Use it for |
+|---|---|
+| **Sopra Delivery Lead** | Start/resume work, route stages, check providers, coordinate the lifecycle |
+| **Sopra Solution Architect** | Design, analyze, review, plan, and stress-test |
+| **Sopra Solution Builder** | Execute an approved plan through the correct provider |
+| **Sopra Solution Verifier** | Test, evaluate, collect evidence, and give a release verdict |
+| **Sopra Method Improver** | Capture scrubbed learning and improve the delivery method |
+
+This follows the same plugin-bundled custom-agent model as Microsoft's Copilot Studio agents. The
+profiles live under `agents/`, declare sharp responsibilities and skills, and appear in the GitHub
+Copilot custom-agent selector. The Sopra agents coordinate the work; they do not copy Microsoft
+agent logic.
+
+Start broad requests with **Sopra Delivery Lead**. Select Builder or Method Improver explicitly for
+mutation and toolkit-change work.
+
+CLI example:
+
+```powershell
+copilot --agent sopra-workflow:sopra-delivery-lead
+```
+
+Every command checks the selected agent before it runs. Designed combinations continue normally;
+the Delivery Lead delegates specialist commands; safe mismatches such as Verifier + `/sw-start`
+produce routing-only feedback; role conflicts such as Verifier + `/sw-implement` are blocked with
+the recommended agent and exact CLI selection command. `/sw-status` is compatible with every Sopra
+agent. Commands remain usable without a selected Sopra agent, but recommend the preferred profile.
+
+---
+
 ## Commands
 
 Run `/sw-start` if you are not sure where to begin — it inspects the project and routes you.
@@ -87,13 +129,42 @@ The stages are **not** a mandatory pipeline. Start anywhere. A mature project mi
 
 ---
 
+## Microsoft plugins and MCP execution
+
+The custom agents can invoke installed Microsoft custom agents and skills, and can use MCP tools
+available in the GitHub Copilot runtime. Availability is checked at the start of work; it is never
+assumed.
+
+Recommended baseline:
+
+```text
+/plugin marketplace add microsoft/copilot-studio-plugin
+/plugin install mcs-assistant@copilot-studio-plugin
+/plugin marketplace add microsoft/power-platform-skills
+/plugin install power-automate@power-platform-skills
+/plugin marketplace add microsoft/power-cat-skills
+/plugin install powercat-dataverse@power-cat-skills
+/plugin install powercat-overflow@power-cat-skills
+```
+
+Microsoft's Power Automate plugin bundles the **FlowAgent MCP server**, so the Sopra Builder can use
+it to browse, build, run, and debug flows after setup/authentication. Dataverse work can use an
+installed Dataverse MCP provider for live metadata/query access, or Power CAT Dataverse for query
+authoring. Missing providers produce an explicit blocked/advisory result, never a false execution
+claim.
+
+See [`templates/copilot/README.md`](templates/copilot/README.md) for the setup checklist. Power
+Pages and mobile-app plugins are intentionally excluded.
+
+---
+
 ## How work is recorded
 
 Every stage writes to the **client project**, under `.sopra/workflow/`:
 
 ```text
 .sopra/workflow/
-  _state.json              Active stage, subject, open questions
+  _state.json              Stage, agent, provider, capability, confirmations, blockers, next action
   design-solution/
   analyze-project/
   grill-me/
@@ -106,7 +177,9 @@ Every stage writes to the **client project**, under `.sopra/workflow/`:
 This is what makes work resumable — a colleague on another machine runs `/sw-status` and picks up
 where you stopped. Committing `.sopra/` to the project repo is usually the right call.
 
-Artifacts are timestamped and never overwritten, so the history of decisions survives.
+Artifacts are timestamped and never overwritten, so the history of decisions survives. Every stage
+also gives the operator a concise chat dashboard with outcome, status, provider, evidence, risks,
+and one next action.
 
 ---
 
@@ -116,6 +189,7 @@ Artifacts are timestamped and never overwritten, so the history of decisions sur
 |---|---|
 | `.github/plugin/plugin.json` | GitHub Copilot manifest |
 | `.claude-plugin/` | Claude manifest + marketplace listing |
+| `agents/` | Plugin-bundled custom agent profiles |
 | `commands/` | The `/sw-*` slash commands |
 | `skills/` | Skill definitions (`<name>/SKILL.md`) |
 | `knowledge/` | The Sopra standard, per service |
@@ -134,7 +208,7 @@ Artifacts are timestamped and never overwritten, so the history of decisions sur
 | Power Apps | `knowledge/power-apps/` |
 | Custom Connectors | `knowledge/custom-connectors/` |
 | Governance | `knowledge/governance/` |
-| Cross-cutting | `knowledge/shared/` — naming, environments, developer setup |
+| Cross-cutting | `knowledge/shared/` — naming, environments, developer setup, agent operating model, provider routing, output contract |
 
 Maturity varies. `knowledge/copilot-studio/` and `knowledge/shared/tools-and-setup.md` are
 substantive; several pattern files under `dataverse/`, `power-automate/` and `solutions/` are still

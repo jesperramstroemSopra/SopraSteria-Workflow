@@ -8,6 +8,16 @@ allowed-tools: Read, Write, Glob, Grep, Task
 
 Initial request: $ARGUMENTS
 
+Before any other step, apply the `sw-draw` row of the
+[agent-command compatibility gate](../knowledge/shared/copilot-agent-operating-model.md#3-agent-command-compatibility-gate).
+Canonical row: Delivery Lead=`Delegate`; Solution Architect=`Primary`; every other Sopra
+agent=`Blocked`. The owner is Sopra Solution Architect (`sopra-solution-architect`). Confirmation
+cannot override this row.
+On mismatch, do not infer or rename the owner and do not offer confirmation as a bypass. Include
+`Recommended agent: Sopra Solution Architect`,
+`Next: copilot --agent sopra-workflow:sopra-solution-architect`, and
+`Then run: /sopra-workflow:sw-draw`.
+
 Run the `draw-architecture` skill in this plugin (`../../skills/draw-architecture/SKILL.md`). Follow
 the conventions in `../../skills/sw-overview/SKILL.md`.
 

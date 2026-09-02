@@ -55,13 +55,22 @@ You are the testing stage of the Sopra workflow pipeline. Your job is to define 
    - Environment variables are defined for all config values
    - Connection references resolve in target environment
 
-3. **Execute tests.** Run each test case:
+3. **Run capability preflight.**
+   - This stage is owned by **Sopra Solution Verifier**.
+   - For Copilot Studio, use the current `mcs-assistant` `/chat` capability for applicable point
+     checks and a separately verified supported provider for evaluations. Current `mcs-assistant`
+     has no Test agent.
+   - For Power Automate solution review, prefer Power CAT Overflow.
+   - For live Dataverse checks, use approved read-only MCP tools.
+   - If the provider is unavailable, create the test protocol but mark execution `blocked`.
+
+4. **Execute tests.** Run each test case:
    - For file-based checks: read and validate the files
    - For convention checks: compare against `../../knowledge/shared/naming-conventions.md`
    - For structural checks: verify against architecture guides
    - For functional checks: describe what manual verification is needed
 
-4. **Produce the test report.**
+5. **Produce the test report.**
 
 ## Output artifact
 
@@ -93,6 +102,8 @@ Format:
 - Evidence: [file paths or screenshots]
 
 ## Failed Tests — Required Actions
+## Providers and Evidence
+## Blocked or Unverified Tests
 ## Recommendations
 ## Verdict: [Ready for deployment / Needs fixes / Not ready]
 ```
@@ -105,6 +116,9 @@ Format:
 - Be honest about what can be verified automatically vs. what needs manual testing.
 - Save the report to disk — it's the audit trail for this workflow run.
 - If tests fail, recommend running `create-plan` again for the fixes, then re-implementing.
+- Obtain confirmation before creating live test data or performing any test-side mutation.
+- Follow `../../knowledge/shared/execution-provider-routing.md` and return the operator dashboard
+  defined in `../../knowledge/shared/operator-output-contract.md`.
 
 ## Reference examples
 

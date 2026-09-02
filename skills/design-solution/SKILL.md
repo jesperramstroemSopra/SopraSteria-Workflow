@@ -128,6 +128,23 @@ Enough detail that `create-plan` can break it into tasks:
 - Connection references and environment variables — never hardcoded values
 - Security: who can do what, and which identity runs each action
 - How it will be tested and monitored
+- Which installed agent, skill, MCP server, or CLI will execute each live operation
+- Which local-write, push, publish, deployment, data-write, or permission boundaries need explicit
+  operator confirmation
+
+## Agent and execution contract
+
+This stage is owned by **Sopra Solution Architect**. Follow:
+
+- `../../knowledge/shared/copilot-agent-operating-model.md`
+- `../../knowledge/shared/execution-provider-routing.md`
+- `../../knowledge/shared/operator-output-contract.md`
+
+For Copilot Studio design, use Sopra guidance and, for an existing modern agent, current
+`mcs-assistant` Describer output as inventory evidence. The current baseline has no dedicated
+Advisor; do not use the superseded plugin as a default. For other domains, use read-only provider
+tools when available. The design must name the intended execution provider and an honest fallback
+for each capability; do not assume a plugin or MCP server is installed.
 
 ## Step 6 — Draw it
 
@@ -144,6 +161,7 @@ Save to `.sopra/workflow/design-solution/design-<YYYY-MM-DD-HHmm>.md` containing
 - Specification of the recommended option
 - Risks and assumptions
 - Which knowledge-base sections informed the design
+- Execution-provider plan and protected-operation confirmation points
 
 Update `.sopra/workflow/_state.json`.
 
@@ -155,3 +173,4 @@ Update `.sopra/workflow/_state.json`.
 - Record what you rejected. That is the most useful part six months later.
 - If the user already has something built, this is the wrong skill — use `analyze-project`.
 - Finish by offering `/sw-grill` to attack the design before anyone commits to it.
+- Return the operator dashboard defined in `operator-output-contract.md`.

@@ -83,9 +83,25 @@ pac copilot list --environment "<environment-id>"
 
 ---
 
-## 3. Copilot Studio Plugin (`mcs-assistant`)
+## 3. GitHub Copilot Plugins and Agent Team
 
-Accelerates Copilot Studio authoring, review, and classic→agentic migration.
+### Sopra-Workflow
+
+```text
+/plugin marketplace add jesperramstroemSopra/SopraSteria-Workflow
+/plugin install sopra-workflow@sopra-workflow
+```
+
+Update an existing installation with `/plugin update sopra-workflow@sopra-workflow`.
+
+After installation, start a new session and select **Sopra Delivery Lead**. The plugin contributes
+five custom agents; verify them in the live custom-agent selector because `copilot plugins list`
+does not list agents.
+
+### Copilot Studio (`mcs-assistant`)
+
+Accelerates modern Copilot Studio authoring, description, management, initialization, and
+classic→agentic migration.
 
 ```text
 /plugin marketplace add microsoft/copilot-studio-plugin
@@ -101,14 +117,43 @@ Update:
 > **⚠️ Remove the predecessor.** If `skills-for-copilot-studio` is still installed, remove or disable
 > it. It only supports classic orchestration and conflicts with `mcs-assistant`.
 
+The current plugin provides Architect, Describer, Init, and Manage agents. It does not provide the
+Advisor, Author, or Test profiles from the predecessor. Do not keep both plugins merely to recover
+those profiles; use the provider routing and explicit blocked state instead.
+
 > **⚠️ Experimental.** Microsoft states this plugin is a research project, not an officially supported
 > product, and is not intended for production use. Sopra treats its output as a **draft accelerator**:
 > review and validate all generated YAML, and never push it straight to UAT or PROD. See
-> [`../UPSTREAM_REFS.md`((../UPSTREAM_REFS.md) entry 3.
+> [`../../UPSTREAM_REFS.md`](../../UPSTREAM_REFS.md), entry 3.
 
 Plugin state lives in `~/.copilot-studio-cli/` (paths, chat config, token cache) and survives plugin
 updates. Token caches use Windows DPAPI where the native dependencies are available; if they are not,
 the plugin falls back to a **plaintext** cache — do not accept that fallback on a shared machine.
+
+### Power Automate (`power-automate`)
+
+```text
+/plugin marketplace add microsoft/power-platform-skills
+/plugin install power-automate@power-platform-skills
+```
+
+This plugin bundles FlowAgent MCP. In Copilot CLI, its tools normally use the `flowagent-` prefix.
+If the skills load but FlowAgent tools do not, invoke the plugin's `setup` skill. Do not configure a
+duplicate FlowAgent server.
+
+### Power CAT
+
+```text
+/plugin marketplace add microsoft/power-cat-skills
+/plugin install powercat-dataverse@power-cat-skills
+/plugin install powercat-overflow@power-cat-skills
+```
+
+Use Power CAT Dataverse for Web API query authoring and Overflow for full-solution Power Automate
+review. Add governance or architecture-advisor plugins only when the project needs them.
+
+Full local setup and optional MCP template:
+[`../../templates/copilot/README.md`](../../templates/copilot/README.md).
 
 ---
 
@@ -123,7 +168,8 @@ Chat-testing a CLI-authored agent needs a one-time public client app registratio
 5. Grant admin consent
 
 The Power Platform API service principal may need tenant-admin registration first. Plan for that
-dependency. Details: [`../copilot-studio/cli-authoring.md`((../copilot-studio/cli-authoring.md#8-testing-a-cli-agent).
+dependency. Details:
+[`../copilot-studio/cli-authoring.md`](../copilot-studio/cli-authoring.md#8-testing-a-cli-agent).
 
 ---
 
@@ -143,8 +189,8 @@ dependency. Details: [`../copilot-studio/cli-authoring.md`((../copilot-studio/cl
 - **Never commit secrets.** No client secrets, connection IDs, tenant IDs, or tokens in the repo.
 - Use environment variables or a secret store locally; GitHub Actions secrets in CI.
 - Connections must use **named service accounts**, never a developer's personal connection.
-- See [`environment-strategy.md`((environment-strategy.md) and
-  [`naming-conventions.md`((naming-conventions.md).
+- See [`environment-strategy.md`](environment-strategy.md) and
+  [`naming-conventions.md`](naming-conventions.md).
 
 ---
 

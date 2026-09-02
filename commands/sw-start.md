@@ -8,6 +8,14 @@ allowed-tools: Read, Write, Glob, Grep, Task
 
 Initial request: $ARGUMENTS
 
+Before any other step, apply the `sw-start` row of the
+[agent-command compatibility gate](../knowledge/shared/copilot-agent-operating-model.md#3-agent-command-compatibility-gate).
+Canonical row: Delivery Lead=`Primary`; every other Sopra agent=`RoutingOnly`. The owner is
+Sopra Delivery Lead (`sopra-delivery-lead`). Confirmation cannot override this row.
+On mismatch, do not infer or rename the owner and do not offer confirmation as a bypass. Include
+`Recommended agent: Sopra Delivery Lead`, `Next: copilot --agent sopra-workflow:sopra-delivery-lead`,
+and `Then run: /sopra-workflow:sw-start`.
+
 You are the entry point for the Sopra Power Platform delivery toolkit. Orient yourself, orient the
 user, then route. Do not start doing delivery work in this command — hand off.
 
@@ -45,11 +53,14 @@ user, then route. Do not start doing delivery work in this command — hand off.
    | Copilot Studio agent YAML review | `/sw-review-yaml` |
    | Captured a new lesson | `/sw-learn` |
 
-6. **Initialize state** if this is a new engagement: create `.sopra/workflow/_state.json` with the
-   project name, detected technologies, chosen stage, and timestamp.
+6. **Initialize state** if this is a new engagement. Use the contract in
+   `../../knowledge/shared/copilot-agent-operating-model.md`: project, active stage/agent, status,
+   detected technologies and architecture, execution provider capability, latest artifact, pending
+   confirmations, blockers, open questions, next action, and timestamp.
 
 ## Rules
 
 - This command orients and routes. It does not analyze, design, or implement.
 - If the workspace looks like the toolkit itself rather than a client project, say so and stop —
   the user has the wrong folder open.
+- Run capability preflight before promising live execution and follow the operator output contract.

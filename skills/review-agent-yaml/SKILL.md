@@ -78,8 +78,9 @@ infrastructure/connections/ → connection references
     Report each missing element — in the agentic loop nothing is enforced structurally, so an unstated
     rule is an unenforced rule.
 11. **Identity fields changed** — `schemaName`, environment binding, template, language, generated IDs.
-12. **Classic leftovers** — references to Power Fx, global/topic variables, or topics. None of these
-    exist in this architecture.
+12. **Executable classic leftovers** — topic Power Fx/state/nodes incorrectly placed in modern CLI
+    agent properties. Called workflows/tools have their own evaluator; references in tool
+    documentation are not automatically defects. Use `../../knowledge/power-fx/hosts.md`.
 
 #### 🟡 Suggestion — Track A
 
@@ -110,6 +111,13 @@ agent.mcs.yml               → agent manifest
 ```
 
 ### Checks — Track B
+
+For every formula-bearing node/action, load `../../knowledge/power-fx/README.md` and
+`../../knowledge/power-fx/validation.md`. Inspect variable declarations, exact property schema,
+en-US syntax, result types, nested record scope, blank/error handling and supported functions.
+Flag mixed WDL/Power Fx and arrow lambdas. Classify external flow expressions separately; do not
+assume `Topic.*` crosses the tool boundary. Cite the source and property, and distinguish editor
+validation from runtime tests in the report.
 
 #### 🔴 Critical — production-blocking
 

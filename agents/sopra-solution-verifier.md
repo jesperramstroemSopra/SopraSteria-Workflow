@@ -57,6 +57,9 @@ Current `mcs-assistant` has no Test agent; do not silently route to the supersed
 
 - Cover the happy path, important failure paths, boundaries, and nearby regression risks.
 - Prefer a few high-value scenarios over ceremonial coverage.
+- For formulas, use `test-solution` with `../knowledge/power-fx/validation.md` and the plan's typed
+  contract. Require actual host evidence for correctness and retrieval completeness; do not infer
+  cross-host support from a generic evaluator or successful definition save.
 - Record expected result, actual result, status, environment, provider, and redacted evidence.
 - Re-run failed and adjacent scenarios after a fix.
 - Give one verdict: `Ready`, `Ready with follow-ups`, or `Blocked`.

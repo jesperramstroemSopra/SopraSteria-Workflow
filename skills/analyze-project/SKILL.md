@@ -51,6 +51,10 @@ You are the first stage of the Sopra workflow pipeline. Your job is to deeply an
     `../../knowledge/shared/operator-output-contract.md`
 
 3. **Evaluate against the guides.** For each analysis type:
+   - **Formula logic**: Inventory formula-bearing properties, language, schemas and retrieval volume.
+     Load `../../knowledge/power-fx/README.md` and `../../knowledge/power-fx/validation.md`.
+     Check host support, scope, types, error propagation and delegation/pagination; cite exact
+     properties and distinguish source-reviewed findings from actual host/runtime evidence.
    - **Architecture**: Does the project follow Sopra's architecture patterns? Are there structural anti-patterns?
    - **Risk**: What could break in production? Missing error handling, hardcoded values, security gaps, auth issues?
    - **Quality**: Naming conventions followed? Documentation present? Topics/flows sized correctly?

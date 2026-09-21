@@ -60,6 +60,15 @@ split it: an agent flow to accept and acknowledge, a cloud flow to do the long w
 
 ## 3. Design rules
 
+### Classify expressions before implementing logic
+
+Use [formula routing](../power-fx/README.md) and the
+[flow/designer host distinction](../power-fx/hosts.md#agent-flows). This guide's Power Automate-based
+flow context does not establish language parity with the new Workflows designer.
+For WDL action fields, use [cloud expressions](../power-automate/patterns/expressions.md); do not
+insert Power Fx or `f => ...`. Record input/output types, evaluator, supported operations,
+pagination, failures and tests in the formula contract.
+
 ### Contract first
 
 The agent chooses the flow based on its **name, description, and input schema**. That metadata *is*

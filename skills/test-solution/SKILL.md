@@ -29,7 +29,17 @@ You are the testing stage of the Sopra workflow pipeline. Your job is to define 
 
 2. **Include standard Sopra checks** based on project type:
 
-   **Copilot Studio:**
+   **Formula-bearing components:**
+   - Load `../../knowledge/power-fx/README.md` and `../../knowledge/power-fx/validation.md`.
+   - Confirm evaluator/property and assert exact input/output types, not just display text.
+   - Cover empty/missing/wrong types, duplicates, nested scope, locale/date boundaries, failures
+     and rows beyond retrieval limits; add negative mixed-language/arrow-lambda cases.
+   - Record actual outputs separately from expected fixtures. Generic evaluator/static checks do
+     not prove target-host acceptance or remote completeness; required inaccessible tests are blocked.
+
+   **Copilot Studio (identify architecture first):**
+   - For CLI agentic-loop agents, test tool contracts and routing; do not require classic topics/state
+   - Apply the topic/variable checks below only to the topic-based track
    - Trigger phrases don't overlap between topics
    - System topics (Greeting, Fallback, Escalate, Error) are customized
    - Auth model matches deployment target (Teams = Integrated)

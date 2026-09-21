@@ -22,6 +22,12 @@
 This document defines the architecture principles, design decisions, and Sopra conventions for
 building **classic** Copilot Studio agents. Read this before designing or changing any classic agent.
 
+For topic formulas, also load [Power Fx routing](../power-fx/README.md),
+[topic host constraints](../power-fx/hosts.md#copilot-studio-topic-based-agents) and
+[source-reviewed fixtures](../power-fx/table-patterns.md). Fixtures have expected outputs, not tenant
+execution proof. Topic Power Fx and called-flow WDL are separate evaluators. Generative orchestration
+within a topic-based agent does not remove its formula support.
+
 ---
 
 ## 1. Agent Design Philosophy

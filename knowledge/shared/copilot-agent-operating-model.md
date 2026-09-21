@@ -116,6 +116,20 @@ restrictive state wins.
 
 ## 5. Protected operations
 
+### Formula handoff gate
+
+For calculations, filters, conditions, mappings, variable assignments and formula columns, load
+[`../power-fx/README.md`](../power-fx/README.md) and pass its formula contract to the next
+stage/provider. The contract must survive delegation: evaluator/property, schema, output shape,
+scope/locale, supported functions, retrieval completeness, failures and acceptance cases.
+Do not replace it with "write the formula". Evidence is separately labeled source-reviewed,
+host-validated or runtime-verified. An unsupported language feature is a design gap, not a license
+to invent syntax or quietly return a default. This gate grants no additional mutation permissions.
+Before accepting specialist output, apply the formula validation checklist to the actual proposed
+expressions and alternatives; do not treat confident wording or a citation as proof of support.
+
+### Confirmation boundaries
+
 The following always require explicit operator confirmation immediately before execution:
 
 - modifying local project implementation files (one clearly scoped batch may be approved at a time);

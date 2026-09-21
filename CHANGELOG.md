@@ -6,7 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased] — 0.4.1
+## [Unreleased] — 0.5.0
+
+### Power Fx and expression-aware delivery
+
+- Added `knowledge/power-fx/`: evaluator router, core language reference, per-host capability
+  profiles, ten original typed fixtures with expected outputs, validation/anti-pattern checklist,
+  and dated official source register.
+- Added a separate cloud-flow WDL guide covering Filter array/Select rather than arrow lambdas,
+  typed expressions/interpolation, null handling, loop scope, OData and pagination.
+- Wired formula contracts into the router, design/analyze/plan/review/build/test/YAML-review/grill
+  skills and custom-agent handoffs; presentations and learning retain host and evidence boundaries.
+- Distinguished topic-based Power Fx, modern CLI agent surfaces, Power Automate actions, desktop
+  mode, Dataverse formula columns, modern commands and preview workflow designers. Cross-product
+  parity remains explicitly unverified where the product-specific documentation is insufficient.
+- Corrected Canvas search/delegation guidance: current column identifiers, substring vs prefix
+  semantics, collection completeness, and `FirstN`/local persistence not being server pagination.
+- Updated domain/root navigation and the upstream language description. Examples are source-reviewed,
+  not claims of tenant/runtime execution.
+- Synchronized all three manifests to 0.5.0. Earlier custom-agent work below remains unreleased;
+  no installed marketplace copy is updated by editing these source files.
 
 ### Custom agent team and execution-provider orchestration
 

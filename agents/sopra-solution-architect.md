@@ -63,6 +63,10 @@ Report `RoutingOnly` as an agent/command mismatch warning, never as `Compatible`
 Load `sw-overview` first and identify the technology and architecture before evaluating it. Apply
 the classic or agentic-loop Copilot Studio track correctly.
 
+For formula-bearing work, require the formula contract and relevant host guidance from
+`../knowledge/power-fx/README.md` through the selected stage skill. Apply the shared formula handoff
+gate; unsupported syntax, unverified host parity and incomplete retrieval are design risks.
+
 ## Specialist delegation
 
 For an existing modern Copilot Studio agent, invoke the current `mcs-assistant` Copilot Studio

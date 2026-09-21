@@ -22,16 +22,20 @@ exists.
 
 ---
 
-## Delegation Limits by Data Source
+## Delegation Is Connector- and Type-Specific
 
-| Data Source | Delegable Filters | Non-Delegable |
-|---|---|---|
-| **Dataverse** | `=`, `<`, `>`, `<=`, `>=`, `<>`, `And`, `Or`, `Not`, `StartsWith`, `EndsWith`, `Contains` (choice/text), `In` (for choice) | `Mid()`, `Len()`, `Left()`, `Right()`, complex nested lookups |
-| **SharePoint** | `=`, `<`, `>`, `<=`, `>=`, `And`, `Or`, `StartsWith` | `Contains` (text columns), lookups across lists, `EndsWith` |
-| **SQL** | Most standard filter operations | Complex expressions depending on driver |
-| **Collections** | All (collections are in-memory; delegation doesn't apply) | N/A |
+Use the [official delegation overview](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/delegation-overview)
+and its linked **connector-specific** lists. Check the entire expression, column types, related
+table depth and aggregate limits. An operator supported for text is not automatically supported for
+a Choice, lookup or calculated/formula column.
 
-Check the Power Apps delegation documentation for the current list — it changes with platform updates.
+Do not use a generic `Contains()` function from another language. Power Fx substring/membership
+operations include `in`, `exactin`, `Search`, and other documented functions, with different semantics
+and delegation support. Verify the exact overload; do not substitute `StartsWith` if substring
+matching is the requirement.
+
+Collections are local: delegation does not apply to querying them, but the query used to **populate**
+them may already have been truncated. See [formula hosts](../../power-fx/hosts.md#canvas-apps).
 
 ---
 
@@ -40,8 +44,9 @@ Check the Power Apps delegation documentation for the current list — it change
 Power Apps shows a **blue underline** (delegation warning) on formulas that are non-delegable. This
 warning is advisory only — the formula still runs, but silently truncates results.
 
-**Always treat delegation warnings in production apps as bugs.** The only acceptable delegation
-warning is in a prototype where you have explicitly documented the limit.
+Treat warnings as production-blocking until completeness is demonstrated or a deliberately bounded
+dataset is documented with an enforced bound and boundary tests. Absence of a warning is not proof
+of completeness; local collections can conceal upstream truncation.
 
 ---
 
@@ -50,7 +55,6 @@ warning is in a prototype where you have explicitly documented the limit.
 ### 1. Filter at the Source (Primary)
 
 ```powerfx
-// Good — delegated to Dataverse
 Filter(
     Orders,
     StatusCode = locSelectedStatus And
@@ -58,34 +62,32 @@ Filter(
 )
 ```
 
-Never apply `Filter()` to a collection of pre-loaded records unless the collection is small and
-bounded by design.
+This is a schema-based pattern, not a runnable fixture: resolve actual column/control names,
+typed status values and connector support. Never apply `Filter()` to a collection of pre-loaded
+records unless it is complete and bounded by design.
 
 ### 2. Use Search() for Text Search
 
-`Search()` on Dataverse is delegable for specific column types. It is equivalent to a multi-column
-`StartsWith` or `Contains` depending on the version.
+`Search()` performs case-insensitive substring matching across the named columns. It is not
+equivalent to prefix-only `StartsWith`. Verify current Dataverse support for the exact column types.
+Current Canvas syntax uses column identifiers rather than old quoted column-name strings:
 
 ```powerfx
-// Search delegable on text columns in Dataverse
-Search(Contacts, txtSearch.Text, "fullname", "emailaddress1")
+Search(Contacts, txtSearch.Text, 'Full Name', 'Email')
 ```
 
-Verify delegation with the blue-underline indicator after writing the formula.
+The display names above are illustrative; resolve the actual schema. Verify diagnostics and
+test a known matching row beyond the configured nondelegation limit.
 
-### 3. Paginate Explicitly
+### 3. Retrieve Completely, Then Limit Presentation
 
-When a result set is large but bounded:
+Bind a gallery to a supported delegable query to let the connector retrieve pages as needed.
+For a custom paged API/flow, implement its continuation token or stable keyset contract, with a
+unique tie-breaker, termination rule, retries and duplicate/missing-row tests.
 
-```powerfx
-// Show 50 records at a time
-FirstN(
-    Filter(Orders, CreatedOn >= locPageStart),
-    50
-)
-```
-
-Pair with a "Load more" button that advances `locPageStart`.
+`FirstN(Filter(...), 50)` limits presentation; it is **not** a server paging algorithm or a fix for
+nondelegation. A timestamp alone can skip rows sharing the same timestamp. `LoadData`/`SaveData`
+persist local data; they do not fetch the next server page.
 
 ### 4. Pre-filter with Required Fields
 
@@ -102,12 +104,12 @@ Filter(
 
 ### 5. When You Must Load a Lookup into a Collection
 
-Small, static lookup tables (status codes, categories, <200 rows, never changes during a session)
-can be loaded into a collection on `App.OnStart` or via Named Formulas. The collection is
-in-memory — delegation does not apply, and you can use any formula.
+Small lookup tables with an enforced bound can be loaded into a collection in a supported behavior
+property. A named formula instead computes a value; it does not run `ClearCollect` or guarantee a
+frozen snapshot. Supported local table operations remain subject to host/type limits.
 
 ```powerfx
-// Named Formula — lazy, memoized
+// App.Formulas declaration, with actual choice schema resolved
 StatusOptions = Choices(Orders.Status)
 ```
 
@@ -121,7 +123,7 @@ Never load unbounded or frequently updated data into a collection as a delegatio
 |---|---|---|
 | `Filter(Collection, ...)` where collection was loaded from full table | Silent 500-record truncation | Filter at the source, not on a pre-loaded collection |
 | Ignoring blue delegation warnings | Correctness bug in production | Fix or document explicitly with a ticket |
-| `Collect(Orders)` in OnStart with no filter | Downloads all records; slow and truncated | Load on demand with Filter on the screen |
+| `ClearCollect(colOrders, Orders)` without a proven bound | Snapshot may be slow and truncated | Load on demand with a supported delegable query |
 | Using `Search()` on columns that don't support it | Non-delegable; blue warning | Use `StartsWith()` or `Filter()` on Dataverse indexed columns |
 | Setting delegation limit to 2000 as a "fix" | Still a limit; still silently truncates | Design for delegation, not for a higher limit |
 
@@ -131,4 +133,6 @@ Never load unbounded or frequently updated data into a collection as a delegatio
 
 - **Source:** `microsoft/power-cat-skills` (powercat-canvas-apps / analyze-canvas-performance)
 - **Accessed:** 2026-Q3
-- **Sopra Divergence:** Sopra treats delegation warnings as build-blocking in production. The 2000-record limit adjustment is never accepted as a solution; proper delegation design is required.
+- **Formula corrections reviewed:** 2026-09-21; [H8 and F3/F13](../../power-fx/sources.md).
+- **Sopra Divergence:** Unresolved completeness is build-blocking. Raising the 2,000-record limit
+  is not a correctness solution; prove delegation/paging or enforce and test a bounded dataset.

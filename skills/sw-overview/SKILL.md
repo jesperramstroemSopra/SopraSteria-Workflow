@@ -40,6 +40,8 @@ project is open.
   solutions/          ARCHITECTURE.md, patterns/ (alm-pipeline, connection-references, environment-strategy,
                       managed-vs-unmanaged, publisher-conventions, release-readiness)
   power-apps/         ARCHITECTURE.md, patterns/ (component-library, delegation, pcf-decision, performance, screen-design)
+  power-fx/          README.md (evaluator router), language-reference.md, hosts.md,
+                      table-patterns.md, validation.md, sources.md
   custom-connectors/  ARCHITECTURE.md, patterns/ (auth-patterns, pagination, policy-templates)
   governance/         ARCHITECTURE.md, patterns/ (coe-kit-patterns, dlp-policies, environment-provisioning)
   shared/             naming-conventions.md, environment-strategy.md, tools-and-setup.md
@@ -119,8 +121,21 @@ Getting this wrong produces confident nonsense.
 | `behaviors/` + `capabilities/` folders | Agentic loop (modern) |
 | `configuration.recognizer.kind: CLICopilotRecognizer` or `CLIAgentRecognizer` in `settings.mcs.yml` | Agentic loop (authoritative) |
 
-Classic uses topics, trigger phrases and Power Fx. Agentic loop has **none of those** — it uses
-Instructions, Knowledge, Tools and Skills.
+Classic uses topics, trigger phrases and Power Fx. The modern CLI agentic-loop **agent surface**
+has none of those — it uses Instructions, Knowledge, Tools and Skills. Called workflows/tools
+have their own evaluators. Generative orchestration alone does not identify the CLI architecture.
+
+### Formula and expression routing
+
+For any calculation, condition, filter, mapping, variable assignment, or formula-column work, load
+`../../knowledge/power-fx/README.md`, then its relevant host profile and patterns. Identify the
+**actual property and evaluator**, not just the product: Power Fx, cloud-flow WDL, OData and scripts
+are different languages. New workflow designers require separate support evidence.
+
+Require the formula contract in the stage artifact and provider handoff: host/property, typed
+inputs/output, scope/locale, retrieval completeness, failure behavior, support evidence and tests.
+Use `../../knowledge/power-fx/validation.md` for acceptance. Missing host/schema information requires
+clarification; unsupported syntax requires redesign, not invented arrow lambdas or silent defaults.
 
 ### Copilot Studio — which track applies?
 
@@ -134,7 +149,7 @@ correct track. Do not mix guidance.
 
 - The customer's Copilot Studio environment does not yet support the agentic loop (check tenant
   feature flags before assuming)
-- The solution uses Power Fx, topic variables, or global variables that cannot be eliminated
+- The agent itself requires topic Power Fx/state that cannot be moved to a supported tool/workflow
 - A hard integration requirement depends on classic actions (e.g., a specific connector action that
   has no equivalent tool form)
 - The customer explicitly rejects migration and needs the current classic agent maintained and extended

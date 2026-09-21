@@ -65,6 +65,11 @@ Do not write from a single sentence. Ask:
 If confidence is low, still capture it — but mark it as **unconfirmed**. A suspected pattern with
 one sighting is useful; pretending it is established fact is not.
 
+For formula lessons, load `../../knowledge/power-fx/README.md` and its source register. Capture the
+exact host/property, version, minimal scrubbed input/formula, expected/actual output and evidence
+level. Do not promote one designer's behavior to all Power Fx hosts; retain preview/uncertainty
+labels and the supporting official source or reproducible contradiction.
+
 ## Step 4 — Choose the destination and confirm
 
 First identify the workspace:

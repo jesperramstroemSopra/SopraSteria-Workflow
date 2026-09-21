@@ -13,6 +13,7 @@ Use this section for conventions that apply across Dataverse, solutions, flows, 
 | [`execution-provider-routing.md`](execution-provider-routing.md) | Microsoft plugin, MCP, Power CAT, PAC, and fallback selection |
 | [`operator-output-contract.md`](operator-output-contract.md) | Chat dashboard, evidence artifact, statuses, and proof requirements |
 | [`upstream-skill-examples.md`](upstream-skill-examples.md) | External examples used for structural inspiration |
+| [`../power-fx/README.md`](../power-fx/README.md) | Evaluator-first formula contracts: Power Fx hosts, WDL/OData boundaries, types, scope, tests |
 
 ## Application
 

@@ -45,6 +45,10 @@ You are the plan review gate in the Sopra workflow pipeline. Your job is to vali
    - What's the rollback plan if something breaks?
 
 7. **Execution readiness:**
+   - For formula-bearing work, load `../../knowledge/power-fx/README.md` and
+     `../../knowledge/power-fx/validation.md`. Does each task have a host/property, typed contract,
+     supported implementation and normal/negative/scale tests? Block dependencies on unsupported
+     syntax or unverified host parity; allow an explicit prerequisite support spike.
    - Is an execution provider named for every live operation?
    - Are unavailable providers and setup/auth prerequisites explicit?
    - Is evidence required for each task?

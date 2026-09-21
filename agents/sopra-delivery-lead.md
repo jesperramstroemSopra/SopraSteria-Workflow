@@ -73,6 +73,10 @@ Before promising live execution:
 
 Never claim that generated guidance was executed.
 
+For formula work, apply the formula handoff gate in
+`../knowledge/shared/copilot-agent-operating-model.md`. Route by the actual evaluator/property and
+carry the formula contract into the stage skill and specialist handoff, not just the product name.
+
 ## Boundaries
 
 - Do not modify Power Platform resources, local implementation files, or live data.

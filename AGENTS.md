@@ -105,6 +105,17 @@ topics, no Power Fx, and no global or topic variables — advice assuming them i
 
 Sopra default for new agents is the agentic loop.
 
+## Formula guidance: evaluator before syntax
+
+Load `knowledge/power-fx/README.md` for any formula-related work. Classify the actual host/property:
+Canvas/topic/desktop/Dataverse Power Fx, cloud-flow WDL, OData and scripts are not interchangeable.
+The modern CLI agent surface has no topic Power Fx; called workflows/tools have separate evaluators.
+Do not infer new-designer parity or generate arrow lambdas such as `f => equals(...)`.
+
+Keep host constraints, original typed examples, failure/completeness tests and dated official
+sources together. Stage skills and provider handoffs must carry the formula contract. Distinguish
+source-reviewed guidance from host validation and runtime evidence; never invent support.
+
 ## Versioning
 
 Three files carry the version and **must stay in sync**:

@@ -24,6 +24,11 @@
 
 ## Error Handling
 
+For expression correctness, use [WDL patterns](expressions.md) and the shared
+[formula validation checklist](../../power-fx/validation.md). Confirm language, output types,
+null/empty policy, item scope, Filter array/Select use and retrieval completeness. An `fx` editor
+icon is not Power Fx support.
+
 - [ ] All flows have a top-level Scope action wrapping the main work
 - [ ] A second Scope (`Run after: Failed, Timed out, Skipped`) handles errors
 - [ ] Error handler captures action name and error message

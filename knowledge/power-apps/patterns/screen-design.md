@@ -27,7 +27,9 @@ multiple screens (list, detail, edit, approval) — that is correct. A screen na
 - Shows a filterable, searchable gallery of records.
 - Binds to a **delegable** data source expression — see [`delegation.md`](delegation.md).
 - Search bar bound to a text input; filter predicate uses `Filter(DataSource, StartsWith(Title, txtSearch.Text))` or equivalent delegable function.
-- Pagination: use `LoadData` / `SaveData` patterns or explicit page-size limits (`FirstN(Filter(...), 50)`).
+- Pagination: use a supported delegable gallery query or an explicit connector continuation/keyset
+  contract. `LoadData` / `SaveData` are local persistence; `FirstN` is a result limit, not server
+  pagination. See [delegation](delegation.md#3-retrieve-completely-then-limit-presentation).
 - Selecting a record navigates to the Detail screen and sets a context or global variable: `Navigate(scrOrderDetail, None, {locSelectedOrder: ThisItem})`.
 
 ### 3. Detail Screen

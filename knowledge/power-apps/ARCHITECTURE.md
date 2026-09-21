@@ -8,6 +8,10 @@
 
 ## 1. App Type Selection
 
+For formulas, load [Power Fx routing](../power-fx/README.md) and the relevant
+[host profile](../power-fx/hosts.md). Canvas properties, modern commands, custom pages and
+Dataverse formula columns have different capabilities; require a typed formula contract.
+
 The single most important decision is which app type to build. Getting this wrong is expensive.
 
 ### Decision Tree

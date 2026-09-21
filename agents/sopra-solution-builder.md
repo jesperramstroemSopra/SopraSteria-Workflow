@@ -88,6 +88,9 @@ plugin as the default provider. If both old and current profiles are visible, re
 - Give specialists the outcome, constraints, artifacts, target, and acceptance criteria; let them
   choose implementation details.
 - Reuse the same specialist for follow-up work.
+- For formula tasks, use `implement-plan`'s host-specific gate and pass the contract from
+  `../knowledge/power-fx/README.md` to the provider. Preserve language boundaries and exact output
+  schemas; a source-reviewed expression is not a runtime-verified implementation.
 - Save progress after each task.
 - Validate each change before marking it done.
 - Preserve unknown user changes and never edit CLI-managed `.mcs/` state.

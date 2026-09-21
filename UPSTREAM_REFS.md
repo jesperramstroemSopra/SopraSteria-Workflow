@@ -57,7 +57,13 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 ### 4. `microsoft/Power-Fx`
 
 - **URL:** https://github.com/microsoft/Power-Fx
-- **Description:** Open-source Power Fx formula language used in Power Apps, Power Automate expressions, and Copilot Studio conditions. The repo contains the language spec, test cases, and C# SDK.
+- **Description:** Open-source Power Fx formula language used in Power Apps, Copilot Studio topic
+  formulas, Dataverse formula columns and Power Fx-enabled desktop flows, with host-specific
+  capabilities. Power Automate **cloud-flow expressions use WDL**, not Power Fx. The repo contains
+  the language spec, test cases, and C# SDK.
+- **Host evidence:** See [`knowledge/power-fx/sources.md`](knowledge/power-fx/sources.md), reviewed
+  2026-09-21, for official language/product references, workflow-designer uncertainty, and refresh
+  rules. Generic SDK support is not proof of target-host acceptance.
 - **Sopra Usage:** Reference for complex formula patterns in Power Apps screens and Copilot Studio condition nodes. The language spec helps disambiguate edge cases not covered in product docs.
 - **Divergences:** Sopra does not use the C# SDK directly; we reference the formula spec only.
 

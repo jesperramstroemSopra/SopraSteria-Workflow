@@ -35,6 +35,10 @@ You are the planning stage of the Sopra workflow pipeline. Your job is to conver
    - **Execution provider**: agent, skill, MCP server, PAC, or local tool
    - **Evidence required**: what proves the task is complete
    - **Confirmation boundary**: local write, live write, push, publish, deployment, or none
+   - **Formula contract (when relevant)**: load `../../knowledge/power-fx/README.md`; name the
+     evaluator/property, input/output schema, supported functions, scale/failure policy and exact
+     acceptance cases from `../../knowledge/power-fx/validation.md`. Make unresolved host support
+     a prerequisite spike, not an implementer's guess.
 
 3. **Order the work.** Sequence tasks respecting dependencies:
    - Critical/blocker items first

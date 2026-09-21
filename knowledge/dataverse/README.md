@@ -11,6 +11,7 @@ This section documents how Sopra models data, security, plugins, and solution la
 | [`README.md`](README.md) | How to use the Dataverse section |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Dataverse design principles, posture, and delivery model |
 | [`patterns/table-design.md`](patterns/table-design.md) | Table design rules and anti-patterns |
+| [`../power-fx/hosts.md`](../power-fx/hosts.md#dataverse-formula-columns) | Formula-column functions, scalar/type/date limits, complexity and automation restrictions |
 | [`patterns/security-model.md`](patterns/security-model.md) | Business units, roles, and record access strategy |
 | [`patterns/plugin-patterns.md`](patterns/plugin-patterns.md) | Plugin registration, transaction, and error patterns |
 | [`patterns/solution-layering.md`](patterns/solution-layering.md) | Layering and dependency strategy for solutions |

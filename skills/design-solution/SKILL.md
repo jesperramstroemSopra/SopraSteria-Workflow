@@ -59,6 +59,8 @@ Load the relevant guides before forming an opinion. At minimum:
   - `../../knowledge/custom-connectors/ARCHITECTURE.md` — when external API integration is in scope
   - `../../knowledge/governance/ARCHITECTURE.md` — when environment setup, DLP, or CoE is in scope
 - `../../playbooks/` — field-learned constraints that are not in any Microsoft document
+- `../../knowledge/power-fx/README.md` and the relevant host profile whenever logic uses formulas,
+  conditions, mappings, calculated fields or expressions. Choose the evaluator/property before syntax.
 
 ## Step 3 — Choose the service, deliberately
 
@@ -83,7 +85,7 @@ The most consequential decision, and the one most often made by habit. Justify i
 
 - The customer's environment does not yet support the agentic loop — verify with the customer's
   Power Platform admin before assuming; check tenant feature flags.
-- The solution requires Power Fx, topic variables, or global variables that cannot be eliminated.
+- The agent requires topic Power Fx/state that cannot be moved to a supported tool/workflow.
 - A hard integration requirement depends on a connector action that has no equivalent tool form.
 - The customer has explicitly rejected migration and needs the existing classic agent maintained.
 - A regulatory or compliance constraint prevents the architecture change.
@@ -128,6 +130,10 @@ Enough detail that `create-plan` can break it into tasks:
 - Connection references and environment variables — never hardcoded values
 - Security: who can do what, and which identity runs each action
 - How it will be tested and monitored
+- For material formula logic, include the formula contract from `../../knowledge/power-fx/README.md`:
+  input/output schemas, host support, scope/locale, retrieval completeness, failure behavior and tests.
+  Justify server query vs local table formula vs flow/service; assign support spikes for uncertain
+  functions/designer features. Never design around `f => equals(...)` or inferred cross-host parity.
 - Which installed agent, skill, MCP server, or CLI will execute each live operation
 - Which local-write, push, publish, deployment, data-write, or permission boundaries need explicit
   operator confirmation

@@ -129,6 +129,18 @@ The stages are **not** a mandatory pipeline. Start anywhere. A mature project mi
 
 ---
 
+## Formula knowledge across the workflow
+
+The [Power Fx knowledge entry point](knowledge/power-fx/README.md) routes formulas by **actual host
+and property**. It covers syntax/types, scope, table transformations without arrow lambdas,
+JSON, errors, locales, delegation and host-specific restrictions, with official sources and
+expected-output fixtures. Cloud flows use a separate [WDL guide](knowledge/power-automate/patterns/expressions.md).
+
+Design, analysis, planning, review, implementation and testing skills require a **formula contract**:
+evaluator, input/output schema, supported functions, retrieval completeness, failure behavior and
+acceptance cases. Agents carry it into Microsoft-provider handoffs. New workflow-designer support
+is not inferred from another product, and source-reviewed examples are not labeled runtime-tested.
+
 ## Microsoft plugins and MCP execution
 
 The custom agents can invoke installed Microsoft custom agents and skills, and can use MCP tools

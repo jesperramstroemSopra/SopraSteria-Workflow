@@ -20,6 +20,7 @@ This section contains architecture guidance, design patterns, and reusable skill
 | [`cli-authoring.md`](cli-authoring.md) | `pac copilot` workflow, project layout, component YAML, connection references, testing | Modern |
 | [`patterns/migration-classic-to-agentic.md`](patterns/migration-classic-to-agentic.md) | Converting a classic agent to the agentic loop | Both |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Classic architecture — topics, orchestration, knowledge, auth, anti-patterns | Classic |
+| [`../power-fx/README.md`](../power-fx/README.md) | Formula routing, scope/types, supported patterns, limits and acceptance checks | Topic formulas; separate evaluator for called tools/workflows |
 | [`patterns/topic-design.md`](patterns/topic-design.md) | Trigger phrases, slot-filling, chaining, adaptive cards | Classic |
 | [`patterns/generative-answers.md`](patterns/generative-answers.md) | Generative answers with knowledge sources | Classic |
 | [`patterns/multi-agent.md`](patterns/multi-agent.md) | Orchestrator + specialist agents, context passing | Both |
@@ -29,6 +30,10 @@ This section contains architecture guidance, design patterns, and reusable skill
 ---
 
 ## When to Use These Patterns
+
+The "no Power Fx" rule concerns the modern CLI **agent surface**, not every tool it calls.
+New workflow designers and Foundry workflows need their own
+[host evidence](../power-fx/hosts.md#agent-flows); do not infer language or variable parity.
 
 - **Starting a new agent** → [`patterns/agentic-loop.md`](patterns/agentic-loop.md), then
   [`cli-authoring.md`](cli-authoring.md).

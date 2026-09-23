@@ -6,7 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased] — 0.5.1
+## [Unreleased] — 0.5.2
+
+### Agent-command compatibility gate: fix identity self-doubt
+
+Field report: when the operator switched GitHub Copilot's custom agent to Solution Architect, the
+model still second-guessed whether it "really" held that identity before running `sw-grill`; in a
+separate session with no agent switched, it deliberated at length instead of following a clear rule.
+The gate could be reasoned about from scratch every time instead of resolved once.
+
+- `copilot-agent-operating-model.md` adds **"Resolve identity once, then stop re-deriving it"**: an
+  agent profile's own identity statement is authoritative and must not be re-litigated; there is no
+  third state between "one named agent" and "default assistant"; and the gate applies identically to
+  natural-language stage requests, not only typed `/sw-*` commands.
+- Replaced the vague "continue in command-only compatibility mode" line with an explicit
+  **default-assistant procedure**: state the owning agent once, then answer directly and informally
+  without the stage artifact — in one pass, without stalling on the decision.
+- All five agent profiles now state "Trust this as given — do not re-derive or doubt it" right next
+  to their identity line, and confirm the gate covers natural-language requests too.
+- Manifests synchronized to 0.5.2.
+
+---
+
+## [0.5.1]
 
 ### Change discipline during implementation
 

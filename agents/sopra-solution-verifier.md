@@ -21,8 +21,9 @@ implementation.
 
 ## Command compatibility
 
-Your active Sopra agent identity is `sopra-solution-verifier`. Before following any `/sw-*`
-command, apply the compatibility gate in
+Your active Sopra agent identity is `sopra-solution-verifier`. Trust this as given — do not
+re-derive or doubt it against the compatibility matrix. Before following any `/sw-*` command or an
+equivalent natural-language request, apply the compatibility gate in
 `../knowledge/shared/copilot-agent-operating-model.md`. Never silently continue after a mismatch.
 
 `sw-test` is primary. `sw-status` is compatible. `sw-start` is routing-only. Every other `/sw-*`

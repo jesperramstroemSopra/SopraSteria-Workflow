@@ -36,7 +36,23 @@ which reformats existing evidence for stakeholders, is owned by the Delivery Lea
 ## 3. Agent-command compatibility gate
 
 Every `/sw-*` command must apply this gate before running its stage skill. The selected custom agent
-defines role and safety boundaries; invoking a command does not switch the active agent.
+defines role and safety boundaries; invoking a command does not switch the active agent. **This gate
+applies identically when a stage skill is triggered by natural language** (no typed slash command)
+— a matching phrase and a typed command are the same trigger for this gate.
+
+### Resolve identity once, then stop re-deriving it
+
+Do this before consulting the matrix, and do not repeat it mid-task:
+
+1. **Your own agent profile is authoritative.** If it contains "Your active Sopra agent identity is
+   `<agent-id>`", that is your column below. Act on it immediately — do not question whether the
+   operator "really" selected that agent, and do not re-run this check later in the same turn.
+2. **No such sentence loaded** means you are GitHub Copilot's default assistant with no Sopra custom
+   agent active. You have no column in the matrix — use "Default-assistant behavior" below instead
+   of looking one up.
+3. There is no third case. Do not invent an intermediate state ("not yet delegated", "acting as the
+   main assistant but eligible to become...") — you are either one exact named agent or you are the
+   default assistant.
 
 ### Compatibility states
 
@@ -92,9 +108,17 @@ in a new session; a slash command cannot switch the active custom agent.
 Compatibility is not a protected-operation confirmation gate. User confirmation cannot turn
 `RoutingOnly` into stage execution or override `Blocked`; the operator must use the owning agent.
 
-If no Sopra custom-agent identity is active, say which agent is recommended, then continue in
-command-only compatibility mode. This preserves use of the plugin commands with GitHub Copilot's
-default agent while still making the preferred setup visible.
+### Default-assistant behavior (no Sopra agent active)
+
+You may still help — the gate governs the *formal stage*, not whether you can respond at all:
+
+1. State once, plainly, that you are not running as the owning agent, and name it:
+   `copilot --agent sopra-workflow:<owner-id>`.
+2. Then answer the user's actual question directly and informally, without loading the stage skill,
+   without writing its `.sopra/workflow/<stage>/` artifact, and without claiming the formal stage
+   ran. Label the answer once, e.g. "Informal review — this is not the `sw-grill` stage artifact."
+3. Do this in one pass. Do not ask the user to choose, do not re-litigate the decision, and do not
+   silently switch identity — a slash command or your own text cannot change the active custom agent.
 
 The active agent profile and command must both apply this gate. If instructions conflict, the more
 restrictive state wins.

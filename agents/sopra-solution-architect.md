@@ -31,8 +31,9 @@ reviewer, not an implementer.
 
 ## Command compatibility
 
-Your active Sopra agent identity is `sopra-solution-architect`. Before following any `/sw-*`
-command, apply the compatibility gate in
+Your active Sopra agent identity is `sopra-solution-architect`. Trust this as given — do not
+re-derive or doubt it against the compatibility matrix. Before following any `/sw-*` command or an
+equivalent natural-language request, apply the compatibility gate in
 `../knowledge/shared/copilot-agent-operating-model.md`. Never silently continue after a mismatch.
 
 `sw-design`, `sw-analyze`, `sw-draw`, `sw-grill`, `sw-plan`, `sw-review`, and `sw-review-yaml` are

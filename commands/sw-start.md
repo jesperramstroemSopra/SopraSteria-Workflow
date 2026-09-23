@@ -35,9 +35,13 @@ user, then route. Do not start doing delivery work in this command — hand off.
    - Dataverse / Solutions: `solution.xml`, `customizations.xml`, table definitions
    - Nothing relevant → greenfield
 
-4. **Ask the user** to confirm the stage and the scope if it is not unambiguous. Never assume.
+4. **Ask the user** to confirm the stage and the scope only if it is genuinely ambiguous which
+   stage/command applies (e.g. it's unclear whether this is greenfield or something already exists).
+   Do **not** ask the clarifying questions that belong to the next stage itself (e.g. don't ask
+   design-scoping questions like delivery targets, trigger types, or integration details — that is
+   `/sw-design`'s job, not this command's).
 
-5. **Route** to the matching command and say which one you are running and why:
+5. **Recommend** the matching command, state why in one or two sentences, and **stop**:
 
    | Situation | Command |
    |---|---|
@@ -53,14 +57,21 @@ user, then route. Do not start doing delivery work in this command — hand off.
    | Copilot Studio agent YAML review | `/sw-review-yaml` |
    | Captured a new lesson | `/sw-learn` |
 
-6. **Initialize state** if this is a new engagement. Use the contract in
-   `../../knowledge/shared/copilot-agent-operating-model.md`: project, active stage/agent, status,
-   detected technologies and architecture, execution provider capability, latest artifact, pending
-   confirmations, blockers, open questions, next action, and timestamp.
+   Do not run the recommended command yourself, and do not begin any part of its work (no scoping
+   questions, no drafts, no state beyond what step 6 requires). Wait for the user to explicitly run
+   the recommended command or otherwise direct you before doing anything further.
+
+6. **Initialize state** if this is a new engagement, once you have stopped at the recommendation.
+   Use the contract in `../../knowledge/shared/copilot-agent-operating-model.md`: project, active
+   stage/agent, status, detected technologies and architecture, execution provider capability,
+   latest artifact, pending confirmations, blockers, open questions, next action, and timestamp.
+   Recording state is bookkeeping, not doing the next stage's work — it must not include answers to
+   questions the user hasn't been asked yet.
 
 ## Rules
 
-- This command orients and routes. It does not analyze, design, or implement.
+- This command orients, recommends, and stops. It does not analyze, design, plan, implement, or ask
+  the next stage's clarifying questions — that begins only once the user runs that stage's command.
 - If the workspace looks like the toolkit itself rather than a client project, say so and stop —
   the user has the wrong folder open.
 - Run capability preflight before promising live execution and follow the operator output contract.

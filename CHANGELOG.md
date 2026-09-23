@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.5.3
+
+### `sw-start`: stop after recommending, don't slide into the next stage's work
+
+Field report: `/sw-start` recommended greenfield design, then went ahead and asked a `/sw-design`
+scoping question ("where should the flow's result be delivered?") instead of stopping at the
+recommendation. The command's own rule ("orients and routes, does not analyze/design/implement")
+wasn't specific enough to stop it from asking the *next* stage's clarifying questions.
+
+- `commands/sw-start.md`: step 4 now explicitly forbids asking clarifying questions that belong to
+  the next stage (e.g. design-scoping questions); step 5 requires stating the recommendation and
+  stopping without running the command or starting any of its work; step 6 (state init) is now
+  scoped to bookkeeping only, with no pre-filled answers to unasked questions.
+
 ## [Unreleased] — 0.5.2
 
 ### Agent-command compatibility gate: fix identity self-doubt

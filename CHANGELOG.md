@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.5.5
+
+### `sw-grill`: turn blocked reviews into an unblock loop
+
+Field report: `/sw-grill` correctly found material blockers, but then stopped with a static
+"blocked" dashboard and a generic next action. The intended behavior is to grill, then ask focused
+questions one at a time so the operator can resolve the issues and continue to the next stage.
+
+- `skills/grill-me/SKILL.md`: adds interactive unblock mode. A blocked/not-ready grill must rank
+  blockers, ask the first focused unblock question, and continue one decision at a time until the
+  blockers are resolved, accepted as risks, or handed off with enough decisions to proceed.
+- `commands/sw-grill.md`: reinforces that blocked results must not stop at analysis or "run review";
+  they must end with the concrete next unblock question.
+- Manifests synchronized to 0.5.5.
+
 ## [Unreleased] — 0.5.4
 
 ### `sw-plan`: require agent-ready implementation plans

@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.5.4
+
+### `sw-plan`: require agent-ready implementation plans
+
+Field report: `/sw-plan` produced a useful direction of travel, but the artifact was still too
+high-level for a downstream implementation agent to execute without re-interviewing the operator.
+The plan needed to behave as a handoff contract, not as a summary.
+
+- `skills/create-plan/SKILL.md`: the planning contract now requires detailed task packets with
+  outcome, rationale, implementation scope, step-by-step implementation notes, affected
+  files/components, provider preflight, acceptance criteria, evidence, tests, confirmation gates,
+  rollback/recovery, risks, and Sopra references.
+- The artifact format now includes readiness verdict, source inputs, confirmed/open decisions,
+  implementation strategy, cross-cutting requirements, validation matrix, and an explicit
+  implementation handoff for the next agent/provider.
+- `commands/sw-plan.md`: reinforces that every task must include verifiable done conditions,
+  acceptance evidence, execution provider, confirmation boundary, and enough detail for autonomous
+  implementation.
+- Manifests synchronized to 0.5.4.
+
 ## [Unreleased] — 0.5.3
 
 ### `sw-start`: stop after recommending, don't slide into the next stage's work

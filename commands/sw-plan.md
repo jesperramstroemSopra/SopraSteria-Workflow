@@ -1,5 +1,5 @@
 ---
-description: Turn findings, designs or grill feedback into an actionable implementation plan with sequenced tasks, dependencies, effort and priorities.
+description: Turn findings, designs or grill feedback into an agent-ready implementation plan with detailed task packets, dependencies, effort, gates and acceptance evidence.
 argument-hint: What to plan (e.g. "fix the critical findings from the last analysis")
 allowed-tools: Read, Write, Glob, Grep, Task
 ---
@@ -25,5 +25,8 @@ Read the relevant prior artifacts in `.sopra/workflow/` first — analysis findi
 grill output. Ask about constraints you cannot infer: deadline, team size, environment access,
 release windows, and what is explicitly out of scope.
 
-Every task needs a verifiable done-condition. "Improve error handling" is not a task. Sequence by
-real dependency, not by wishful ordering. Save to `.sopra/workflow/create-plan/`.
+Every task needs a verifiable done-condition, acceptance evidence, execution provider, confirmation
+boundary, and enough implementation detail that a downstream agent can execute without rereading the
+chat or prior artifacts. "Improve error handling" is not a task. Sequence by real dependency, not by
+wishful ordering. If details are missing, create explicit decision points or discovery tasks instead
+of producing a high-level placeholder plan. Save to `.sopra/workflow/create-plan/`.

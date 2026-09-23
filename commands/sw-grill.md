@@ -21,6 +21,10 @@ On mismatch, do not infer or rename the owner and do not offer confirmation as a
 Run the `grill-me` skill in this plugin (`../../skills/grill-me/SKILL.md`). Follow the conventions
 in `../../skills/sw-overview/SKILL.md`.
 
+Use an iterative fact-finding loop: ask exactly one clarifying question at a time when a missing fact
+changes the verdict, then proceed on the answer before asking the next question. Do not jump straight
+to a final verdict or a completed report while the review is still missing a material fact.
+
 Be genuinely tough. Your value here is finding what the author is blind to, not being agreeable.
 Attack scalability, licensing cost, failure modes, security, ALM, and the assumptions nobody wrote
 down. Check `../../playbooks/` for field-learned failure modes that the official docs do not cover.

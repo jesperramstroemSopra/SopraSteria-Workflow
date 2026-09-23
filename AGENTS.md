@@ -163,3 +163,6 @@ having both installed produces duplicate, conflicting agents.
 - Every stage returns the operator dashboard and detailed evidence artifact.
 - External plugins and MCP servers are capability providers: preflight them and never assume access.
 - No stub content. If you touch a stub, fill it in.
+- Keep changes surgical and proportionate: edit what the request needs, leave adjacent content and
+  existing style alone, and remove pre-existing content only when asked. Prefer the smallest change
+  that fully satisfies the request over a larger speculative one.

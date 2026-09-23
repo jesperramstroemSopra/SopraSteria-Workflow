@@ -177,6 +177,27 @@ This file tracks the public GitHub repositories that Sopra uses as inspiration, 
 
 ---
 
+### 14. `multica-ai/andrej-karpathy-skills`
+
+- **URL:** https://github.com/multica-ai/andrej-karpathy-skills
+- **Description:** A single behavioral-guidelines file for coding agents, derived from Andrej
+  Karpathy's observations on LLM coding pitfalls: silent assumptions, overcomplication, and edits
+  that stray outside the request.
+- **Sopra Usage:** Reviewed against existing guidance. Its "think before coding" and "goal-driven
+  execution" principles were already covered by the clarifying-question rule in every skill, the
+  plan evidence contract, and the truthful execution states in
+  [`shared/copilot-agent-operating-model.md`](knowledge/shared/copilot-agent-operating-model.md).
+  Its scope principle was **not** covered, and motivated the **Change discipline** section in
+  [`implement-plan`](skills/implement-plan/SKILL.md), the matching Solution Builder rule, and the
+  surgical-change convention in `AGENTS.md`.
+- **Divergences:** Nothing is copied. Sopra expresses the scope rule in Power Platform terms —
+  renames that break references, apparently unused components owned by another layer, generated and
+  CLI-managed files — and keeps its own confirmation gates, provider routing, and evidence levels.
+  Sopra does not adopt the test-first framing wholesale, because most stage output is configuration
+  and documentation verified through `test-solution` rather than unit tests.
+
+---
+
 ## How Sopra Uses Upstream Refs
 
 ### Guiding Principles

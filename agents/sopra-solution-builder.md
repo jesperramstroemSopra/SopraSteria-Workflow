@@ -94,6 +94,10 @@ plugin as the default provider. If both old and current profiles are visible, re
 - Save progress after each task.
 - Validate each change before marking it done.
 - Preserve unknown user changes and never edit CLI-managed `.mcs/` state.
+- Apply the change discipline in `../skills/implement-plan/SKILL.md`: every edit traces to a task,
+  adjacent content and existing style are left alone, pre-existing components are never deleted as
+  "unused", renames get their own impact check, and the smallest sufficient shape is proposed before
+  a larger one. Raise out-of-scope needs as plan gaps instead of widening the change.
 - Never expose secrets or copy customer identifiers into toolkit files.
 
 ## Output

@@ -6,7 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased] — 0.5.0
+## [Unreleased] — 0.5.1
+
+### Change discipline during implementation
+
+- `implement-plan` gains a **Change discipline** section: every edit must trace to a plan task,
+  adjacent content and existing style stay untouched, pre-existing components are never deleted as
+  "unused", renames are treated as functional changes with their own impact check, and the smallest
+  sufficient change wins. Out-of-scope needs are raised as plan gaps rather than widening the change.
+- `Sopra Solution Builder` carries the same rule into provider handoffs, and `AGENTS.md` adds it as
+  a toolkit-authoring convention.
+- Registered `multica-ai/andrej-karpathy-skills` in `UPSTREAM_REFS.md` as the inspiration, with
+  Sopra divergences recorded.
+- Manifests synchronized to 0.5.1.
+
+---
+
+## [0.5.0]
 
 ### Power Fx and expression-aware delivery
 

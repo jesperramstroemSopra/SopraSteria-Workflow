@@ -255,6 +255,29 @@ pac copilot push --project-dir "<agent-folder>"
 pac copilot publish --bot "<bot-id-or-schema-name>" --environment "<environment-id-or-dataverse-url>"
 ```
 
+#### Node.js 24 behind an enterprise proxy
+
+When a Copilot Studio Manage provider uses Node.js 24's built-in `fetch` to pull an agent, Node does
+not use `HTTP_PROXY` or `HTTPS_PROXY` unless environment-proxy support is explicitly enabled. Set
+the opt-in variable **before starting Copilot** so the Manage agent and its helper process inherit
+it:
+
+```powershell
+$env:NODE_USE_ENV_PROXY = "1"
+copilot
+```
+
+For a persistent per-user setting, run the following and then start a new terminal:
+
+```powershell
+[Environment]::SetEnvironmentVariable("NODE_USE_ENV_PROXY", "1", "User")
+```
+
+Use this when `HTTP_PROXY`/`HTTPS_PROXY` are already configured but a pull appears to hang or fails
+without reaching the proxy. Confirm proxy policy and connectivity before treating the failure as a
+Copilot Studio, WebSocket, or PAC problem. This also applies to the superseded
+`skills-for-copilot-studio` Manage Agent when it must be used for an existing classic project.
+
 ### List
 
 ```powershell

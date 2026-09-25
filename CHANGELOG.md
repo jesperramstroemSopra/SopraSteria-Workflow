@@ -6,6 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] — 0.5.6
+
+### Copilot Studio Manage: support Node.js 24 enterprise proxies
+
+Field report: agent pull could not reach the network through an enterprise proxy even though
+`HTTP_PROXY` and `HTTPS_PROXY` were configured. Node.js 24's built-in `fetch` requires
+`NODE_USE_ENV_PROXY=1` before the Copilot process starts.
+
+- `knowledge/copilot-studio/cli-authoring.md`: adds pull troubleshooting, session and persistent
+  PowerShell setup, inheritance guidance, and the silent/direct-connection failure signal.
+- `knowledge/shared/tools-and-setup.md`: adds the prerequisite to Copilot Studio provider setup,
+  including the legacy Manage Agent case for existing classic projects.
+- Manifests synchronized to 0.5.6.
+
 ## [Unreleased] — 0.5.5
 
 ### `sw-grill`: turn blocked reviews into an unblock loop

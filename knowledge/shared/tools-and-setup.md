@@ -121,6 +121,18 @@ The current plugin provides Architect, Describer, Init, and Manage agents. It do
 Advisor, Author, or Test profiles from the predecessor. Do not keep both plugins merely to recover
 those profiles; use the provider routing and explicit blocked state instead.
 
+> **Enterprise proxy + Node.js 24.** Manage-provider helper scripts that use Node's built-in
+> `fetch` ignore `HTTP_PROXY` and `HTTPS_PROXY` unless `NODE_USE_ENV_PROXY=1` is set. Set it before
+> starting Copilot so child processes inherit it:
+>
+> ```powershell
+> [Environment]::SetEnvironmentVariable("NODE_USE_ENV_PROXY", "1", "User")
+> ```
+>
+> Start a new terminal afterwards. This is also required when an existing classic project still
+> depends on the superseded `skills-for-copilot-studio` Manage Agent. See the
+> [pull troubleshooting note](../copilot-studio/cli-authoring.md#nodejs-24-behind-an-enterprise-proxy).
+
 > **⚠️ Experimental.** Microsoft states this plugin is a research project, not an officially supported
 > product, and is not intended for production use. Sopra treats its output as a **draft accelerator**:
 > review and validate all generated YAML, and never push it straight to UAT or PROD. See
